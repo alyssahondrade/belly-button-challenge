@@ -7,6 +7,8 @@ d3.json(samples_url).then(function(data) {
     var metadata = Object.values(data.metadata);
     var samples = Object.values(data.samples);
 
+    //-------- CREATE THE HORIZONTAL BAR GRAPH --------//
+    
     // Get the first 10 results for each sample_value and reverse the list
     let sample_values = samples.map((sample) => (sample.sample_values).slice(0,10).reverse());
 
@@ -18,10 +20,7 @@ d3.json(samples_url).then(function(data) {
 
         // Create a list to hold the transformed list
         let id_list = []
-        let add_otu = top_ids.map(function(id) {
-            // Append "OTU" to each id
-            id_list.push(`OTU ${id}`);
-        });
+        let add_otu = top_ids.map((id) => id_list.push(`OTU ${id}`));
 
         // Reverse the list to match the sample_values list, for plotting
         return id_list.reverse();
@@ -30,7 +29,7 @@ d3.json(samples_url).then(function(data) {
     // Get the sample labels, reversed as above
     let sample_labels = samples.map((sample) => (sample.otu_labels).slice(0, 10));
 
-    let trace = {
+    let bar_trace = {
         x: sample_values[0],
         y: sample_otuids[0],
         type: "bar",
@@ -38,7 +37,7 @@ d3.json(samples_url).then(function(data) {
         name: sample_labels[0]
     };
 
-    let trace_data = [trace];
+    let bar_data = [bar_trace];
 
     let layout = {
         title: `Subject "${names[0]}" Samples`,
@@ -54,5 +53,25 @@ d3.json(samples_url).then(function(data) {
     };
 
     // Create the plot
-    Plotly.plot("bar", trace_data, layout);
+    Plotly.plot("bar", bar_data, layout);
+
+    //-------- CREATE THE BUBBLE CHART --------//
+    let bubble_values = samples.map((sample) => (sample.sample_values))[0];
+    let bubble_ids = samples.map((sample) => (sample.otu_ids))[0];
+    let bubble_labels = samples.map((sample) => (sample.otu_labels))[0];
+    
+    let bubble_trace = {
+        x: bubble_ids,
+        y: bubble_values,
+        mode: "markers",
+        marker: {
+            size: bubble_values,
+            color: bubble_ids
+        },
+        text: bubble_labels
+    };
+
+    let bubble_data = [bubble_trace];
+
+    Plotly.plot("bubble", bubble_data);
 });
