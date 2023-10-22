@@ -80,10 +80,17 @@ d3.json(samples_url).then(function(data) {
 
     //-------- CREATE THE METADATA CHART --------//
     function subject_metadata(id) {
-        let metadata_box = d3.select("#sample-metadata").text(id);
-        console.log(metadata);
-    };
-    
-    subject_metadata("Yup yup yup");
+        // let metadata_box = d3.select("#sample-metadata").text(id);
+        for (let i=0; i<metadata.length; i++) {
+            subject = metadata[i]
+            if (id == subject.id) {
+                for (let key in subject) {
+                    // Create a paragraph element for each dictionary row
+                    let pair = d3.select("#sample-metadata").append("p").text(`${key}: ${subject[key]}`);
+                };
+            };            
+        };
+    };    
+    subject_metadata(940);
     
 });
