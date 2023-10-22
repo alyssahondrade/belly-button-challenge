@@ -1,6 +1,10 @@
 // Read the `samples.json` from the provided url
 const samples_url = "https://2u-data-curriculum-team.s3.amazonaws.com/dataviz-classroom/v1.1/14-Interactive-Web-Visualizations/02-Homework/samples.json";
 
+//-------- FUNCTION TO CREATE THE PLOTS --------//
+// function create_plots(
+
+
 // Fetch the JSON data
 d3.json(samples_url).then(function(data) {
     var names = Object.values(data.names);
@@ -73,5 +77,13 @@ d3.json(samples_url).then(function(data) {
     let bubble_data = [bubble_trace];
 
     Plotly.plot("bubble", bubble_data);
+
+    //-------- CREATE THE METADATA CHART --------//
+    function subject_metadata(id) {
+        let metadata_box = d3.select("#sample-metadata").text(id);
+        console.log(metadata);
+    };
+    
+    subject_metadata("Yup yup yup");
     
 });
