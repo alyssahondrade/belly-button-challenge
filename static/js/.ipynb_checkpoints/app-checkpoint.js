@@ -8,7 +8,6 @@ d3.json(samples_url).then(function(data) {
     var samples = Object.values(data.samples);
 
     //-------- CREATE THE HORIZONTAL BAR GRAPH --------//
-    
     // Get the first 10 results for each sample_value and reverse the list
     let sample_values = samples.map((sample) => (sample.sample_values).slice(0,10).reverse());
 
@@ -20,7 +19,7 @@ d3.json(samples_url).then(function(data) {
 
         // Create a list to hold the transformed list
         let id_list = []
-        let add_otu = top_ids.map((id) => id_list.push(`OTU ${id}`));
+        let add_otu = top_ids.map((id) => id_list.push("OTU" + id));
 
         // Reverse the list to match the sample_values list, for plotting
         return id_list.reverse();
@@ -74,4 +73,5 @@ d3.json(samples_url).then(function(data) {
     let bubble_data = [bubble_trace];
 
     Plotly.plot("bubble", bubble_data);
+    
 });
