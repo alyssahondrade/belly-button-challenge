@@ -7,20 +7,27 @@ d3.json(samples_url).then(function(data) {
     var metadata = Object.values(data.metadata);
     var samples = Object.values(data.samples);
 
-    let sample_values = samples.map((sample) => (sample.sample_values).slice(0,10));
-    
+    // Get the first 10 results for each sample_value and reverse the list
+    let sample_values = samples.map((sample) => (sample.sample_values).slice(0,10).reverse());
+
+    // Get the otu_ids
     let sample_otuids = samples.map(function(sample) {
+        
         // Get the corresponding top 10 otu_ids
         let top_ids = sample.otu_ids.slice(0, 10);
 
-        // Append "OTU" to each id
+        // Create a list to hold the transformed list
         let id_list = []
         let add_otu = top_ids.map(function(id) {
+            // Append "OTU" to each id
             id_list.push(`OTU ${id}`);
         });
-        console.log(id_list);
-        return id_list;
+
+        // Reverse the list to match the sample_values list, for plotting
+        return id_list.reverse();
     });
+
+    // Get the sample labels, reversed as above
     let sample_labels = samples.map((sample) => (sample.otu_labels).slice(0, 10));
 
     let trace = {
@@ -33,41 +40,19 @@ d3.json(samples_url).then(function(data) {
 
     let trace_data = [trace];
 
-    Plotly.plot("bar", trace_data);
-    // let indiv_ids = first_indiv.map((sample) => (sample.otu_ids));
+    let layout = {
+        title: `Subject "${names[0]}" Samples`,
+        xaxis: {
+            title: {text: "Sample Values"}
+        },
+        yaxis: {
+            title: {text: "IDs", standoff: 10},
+            automargin: true,
+            tickcolor: "white",
+            ticklen: 10
+        }
+    };
 
-    // // Get the data for the first individual
-    // let indiv_sample = samples[0]['sample_values'];
-    // let indiv_ids = samples[0]['otu_ids'];
-    // let indiv_labels = samples[0]['otu_labels'];
-
-    // Create the horizontal bar graph
-    
-
-    // Sort the samples in descending order
-    // let descending_samples = samples.sort((first, second) => second.samples - first.samples);
-    // console.log(descending_samples);
-    // for (let i=0; i<samples.length; i++) {
-    //     let row = samples[i];
-    //     let sample_values = row['sample_values'];
-    //     let otu_ids = row['otu_ids'];
-
-    //     console.log(sample_values, otu_ids);
-        
-        // Sort the samples in descending order
-        // let descending_samples = row.sort(
-        //     (first, second) => second.row - first.row);
-        // console.log(descending_samples);
-
-    // };
+    // Create the plot
+    Plotly.plot("bar", trace_data, layout);
 });
-
-
-
-// console.log(metadata);
-// // Sort the sample_values in descending order
-// let descending_samples = data.sort(
-//     (first, second) => second.sample_values - first.sample_values
-//     );
-
-// console.log(descending_samples);
