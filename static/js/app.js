@@ -4,7 +4,9 @@ const samples_url = "https://2u-data-curriculum-team.s3.amazonaws.com/dataviz-cl
 //-------- FUNCTION TO GET THE DATA --------//
 function get_data(subject_id) {
     d3.json(samples_url).then(function(data) {
+        
         // Import relevant JSON array
+        var names = Object.values(data.names);
         var samples = Object.values(data.samples);
 
         // Get the first 10 results for each sample_value and reverse the list
@@ -18,7 +20,7 @@ function get_data(subject_id) {
     
             // Create a list to hold the transformed list
             let id_list = []
-            let add_otu = top_ids.map((id) => id_list.push("OTU" + id));
+            let add_otu = top_ids.map((id) => id_list.push("OTU " + id));
     
             // Reverse the list to match the sample_values list, for plotting
             return id_list.reverse();
@@ -27,8 +29,37 @@ function get_data(subject_id) {
         // Get the sample labels, reversed as above
         let sample_labels = samples.map((sample) => (sample.otu_labels).slice(0, 10));
 
-        console.log(sample_values[subject_id]); // THIS RETURNS UNDEFINED>
-        return(sample_values[subject_id]);
+        // Get the index of the subject_id
+        let subject_idx = names.indexOf(subject_id);
+        console.log(subject_idx);
+
+        // Create the bar chart
+        let bar_data = [{
+            x: sample_values[subject_idx],
+            y: sample_otuids[subject_idx],
+            type: "bar",
+            orientation: "h",
+            name: sample_labels[subject_idx]
+        }];
+    
+        let layout = {
+            title: `Subject "${names[subject_idx]}" Samples`,
+            xaxis: {
+                title: {text: "Sample Values"}
+            },
+            yaxis: {
+                title: {text: "IDs", standoff: 10},
+                automargin: true,
+                tickcolor: "white",
+                ticklen: 10
+            }
+        };
+    
+        // Create the plot
+        Plotly.plot("bar", bar_data, layout);
+
+        // console.log(sample_values[subject_idx]);
+        // return[sample_values[subject_id], sample_otuids[subject_id], sample_labels[subject_id]];
     });
 };
 
@@ -70,7 +101,8 @@ function init() {
     //     // Create the plot
     //     Plotly.plot("bar", bar_data);
     // });
-    get_data(940);
+    let output = get_data("940");
+    console.log(output);
 };
 
 init();
