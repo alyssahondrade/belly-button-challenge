@@ -123,10 +123,14 @@ function subject_metadata(id) {
         let subject_metadata = metadata.filter(find_id)[0];
         console.log(subject_metadata);
 
+        // Clear the metadata info box
+        let metadata_box = d3.select("#sample-metadata");
+        metadata_box.selectAll("p").remove();
+        
         // Loop through subject_metadata to get each key-value pair
         for (let key in subject_metadata) {
-            d3.select("#sample-metadata").append("p").text(`${key}: ${subject_metadata[key]}`);
-            console.log(key, subject_metadata[key]);
+            metadata_box.append("p").text(`${key}: ${subject_metadata[key]}`);
+            // console.log(key, subject_metadata[key]);
         };
         
         // Loop through the array to find the correct id
