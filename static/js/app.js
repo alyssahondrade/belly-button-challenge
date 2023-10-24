@@ -89,44 +89,38 @@ function get_data(subject_id) {
 };
 
 
-//-------- FUNCTION TO CREATE INITIAL PLOT --------//
-function init() {
-    // d3.json(samples_url).then(function(data) {
-    //     // Import relevant JSON array
-    //     var samples = Object.values(data.samples);
 
-    //     // Get the first 10 results for each sample_value and reverse the list
-    //     let sample_values = samples.map((sample) => (sample.sample_values).slice(0,10).reverse());
+//-------- FUNCTION TO CREATE THE METADATA CHART --------//
+function subject_metadata(id) {
+    d3.json(samples_url).then(function(data) {
+
+        // Import relevant JSON array
+        var metadata = Object.values(data.metadata);
         
-    //     // Get the otu_ids
-    //     let sample_otuids = samples.map(function(sample) {
-            
-    //         // Get the corresponding top 10 otu_ids
-    //         let top_ids = sample.otu_ids.slice(0, 10);
-    
-    //         // Create a list to hold the transformed list
-    //         let id_list = []
-    //         let add_otu = top_ids.map((id) => id_list.push("OTU" + id));
-    
-    //         // Reverse the list to match the sample_values list, for plotting
-    //         return id_list.reverse();
-    //     });
+        // let metadata_box = d3.select("#sample-metadata").text(id);
 
-    //     // Get the sample labels, reversed as above
-    //     let sample_labels = samples.map((sample) => (sample.otu_labels).slice(0, 10));
+        // Loop through the array to find the correct id
+        for (let i=0; i<metadata.length; i++) {
+            subject = metadata[i]
 
-    //     var bar_data = [{
-    //         x: sample_values[0],
-    //         y: sample_otuids[0],
-    //         type: "bar",
-    //         orientation: "h",
-    //         name: sample_labels[0]
-    //     }];
+            // Code block for when the match is found
+            if (id == subject.id) {
+                
+                // Loop through each key in the dictionary
+                for (let key in subject) {
+                    
+                    // Create a paragraph element for each dictionary row
+                    let pair = d3.select("#sample-metadata").append("p").text(`${key}: ${subject[key]}`);
+                };
+            };            
+        };
+    });
+};
 
-    //     // Create the plot
-    //     Plotly.plot("bar", bar_data);
-    // });
+//-------- FUNCTION TO CREATE WEBPAGE --------//
+function init() {
     get_data("940");
+    subject_metadata("940");
 };
 
 init();
