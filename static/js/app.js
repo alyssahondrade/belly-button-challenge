@@ -49,9 +49,13 @@ function get_data(subject_id) {
 
         // Get the index of the subject_id
         let subject_idx = names.indexOf(subject_id);
-        console.log(subject_idx);
+        // console.log(subject_idx);
 
         //-------- CREATE THE BAR CHART --------//
+        let x = [];
+        let y = [];
+        let name = [];
+        
         let bar_data = [{
             x: sample_values[subject_idx].slice(0, 10).reverse(),
             y: edited_otuids[subject_idx].slice(0, 10).reverse(),
@@ -73,7 +77,8 @@ function get_data(subject_id) {
             }
         };
 
-        Plotly.plot("bar", bar_data, bar_layout);
+        Plotly.newPlot("bar", bar_data, bar_layout);
+
 
         //-------- CREATE THE BUBBLE CHART --------//
         let bubble_data = [{
@@ -98,9 +103,8 @@ function get_data(subject_id) {
             }
         };
         
-        Plotly.plot("bubble", bubble_data, bubble_layout);
+        Plotly.newPlot("bubble", bubble_data, bubble_layout);
     });
-    console.log("THIS CODE JUST RAN");
 };
 
 //-------- FUNCTION TO CREATE THE METADATA CHART --------//
@@ -115,13 +119,13 @@ function subject_metadata(id) {
 
         // Use filter to find the correct subject id
         function find_id(subject) {
-            console.log(typeof(id), id, typeof(subject.id), subject.id);
+            // console.log(typeof(id), id, typeof(subject.id), subject.id);
             return(subject.id === parseInt(id));
         };
         
         // let subject_id = metadata.filter((subject) => subject.id === id);
         let subject_metadata = metadata.filter(find_id)[0];
-        console.log(subject_metadata);
+        // console.log(subject_metadata);
 
         // Clear the metadata info box
         let metadata_box = d3.select("#sample-metadata");
@@ -130,24 +134,7 @@ function subject_metadata(id) {
         // Loop through subject_metadata to get each key-value pair
         for (let key in subject_metadata) {
             metadata_box.append("p").text(`${key}: ${subject_metadata[key]}`);
-            // console.log(key, subject_metadata[key]);
         };
-        
-        // Loop through the array to find the correct id
-        // for (let i=0; i<metadata.length; i++) {
-        //     subject = metadata[i]
-
-        //     // Code block for when the match is found
-        //     if (id == subject.id) {
-                
-        //         // Loop through each key in the dictionary
-        //         for (let key in subject) {
-                    
-        //             // Create a paragraph element for each dictionary row
-        //             let pair = d3.select("#sample-metadata").append("p").text(`${key}: ${subject[key]}`);
-        //         };
-        //     };            
-        // };
     });
 };
 
@@ -162,7 +149,7 @@ function updatePlotly() {
 
         let dropdown_menu = d3.select("#selDataset");
 
-        console.log(this.onchange);
+        // console.log(this.onchange);
         // Add each subject id as an option
         for (let i=0; i<names.length; i++) {
             if (this.value === names[i]) {
@@ -185,94 +172,3 @@ function init() {
 };
 
 init();
-
-
-// // Fetch the JSON data
-// d3.json(samples_url).then(function(data) {
-//     var names = Object.values(data.names);
-//     var metadata = Object.values(data.metadata);
-//     var samples = Object.values(data.samples);
-
-//     //-------- CREATE THE HORIZONTAL BAR GRAPH --------//
-//     // Get the first 10 results for each sample_value and reverse the list
-//     let sample_values = samples.map((sample) => (sample.sample_values).slice(0,10).reverse());
-
-//     // Get the otu_ids
-//     let sample_otuids = samples.map(function(sample) {
-        
-//         // Get the corresponding top 10 otu_ids
-//         let top_ids = sample.otu_ids.slice(0, 10);
-
-//         // Create a list to hold the transformed list
-//         let id_list = []
-//         let add_otu = top_ids.map((id) => id_list.push("OTU" + id));
-
-//         // Reverse the list to match the sample_values list, for plotting
-//         return id_list.reverse();
-//     });
-
-//     // Get the sample labels, reversed as above
-//     let sample_labels = samples.map((sample) => (sample.otu_labels).slice(0, 10));
-
-//     let bar_trace = {
-//         x: sample_values[0],
-//         y: sample_otuids[0],
-//         type: "bar",
-//         orientation: "h",
-//         name: sample_labels[0]
-//     };
-
-//     let bar_data = [bar_trace];
-
-//     let layout = {
-//         title: `Subject "${names[0]}" Samples`,
-//         xaxis: {
-//             title: {text: "Sample Values"}
-//         },
-//         yaxis: {
-//             title: {text: "IDs", standoff: 10},
-//             automargin: true,
-//             tickcolor: "white",
-//             ticklen: 10
-//         }
-//     };
-
-//     // Create the plot
-//     Plotly.plot("bar", bar_data, layout);
-
-//     //-------- CREATE THE BUBBLE CHART --------//
-//     let bubble_values = samples.map((sample) => (sample.sample_values))[0];
-//     let bubble_ids = samples.map((sample) => (sample.otu_ids))[0];
-//     let bubble_labels = samples.map((sample) => (sample.otu_labels))[0];
-    
-//     let bubble_trace = {
-//         x: bubble_ids,
-//         y: bubble_values,
-//         mode: "markers",
-//         marker: {
-//             size: bubble_values,
-//             color: bubble_ids
-//         },
-//         text: bubble_labels
-//     };
-
-//     let bubble_data = [bubble_trace];
-
-//     Plotly.plot("bubble", bubble_data);
-
-//     //-------- CREATE THE METADATA CHART --------//
-//     function subject_metadata(id) {
-//         // let metadata_box = d3.select("#sample-metadata").text(id);
-//         for (let i=0; i<metadata.length; i++) {
-//             subject = metadata[i]
-//             if (id == subject.id) {
-//                 for (let key in subject) {
-//                     // Create a paragraph element for each dictionary row
-//                     let pair = d3.select("#sample-metadata").append("p").text(`${key}: ${subject[key]}`);
-//                 };
-//             };            
-//         };
-//     };    
-//     subject_metadata(940);
-    
-// });
