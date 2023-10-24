@@ -112,21 +112,38 @@ function subject_metadata(id) {
         
         // let metadata_box = d3.select("#sample-metadata").text(id);
 
-        // Loop through the array to find the correct id
-        for (let i=0; i<metadata.length; i++) {
-            subject = metadata[i]
 
-            // Code block for when the match is found
-            if (id == subject.id) {
-                
-                // Loop through each key in the dictionary
-                for (let key in subject) {
-                    
-                    // Create a paragraph element for each dictionary row
-                    let pair = d3.select("#sample-metadata").append("p").text(`${key}: ${subject[key]}`);
-                };
-            };            
+        // Use filter to find the correct subject id
+        function find_id(subject) {
+            console.log(typeof(id), id, typeof(subject.id), subject.id);
+            return(subject.id === parseInt(id));
         };
+        
+        // let subject_id = metadata.filter((subject) => subject.id === id);
+        let subject_metadata = metadata.filter(find_id)[0];
+        console.log(subject_metadata);
+
+        // Loop through subject_metadata to get each key-value pair
+        for (let key in subject_metadata) {
+            d3.select("#sample-metadata").append("p").text(`${key}: ${subject_metadata[key]}`);
+            console.log(key, subject_metadata[key]);
+        };
+        
+        // Loop through the array to find the correct id
+        // for (let i=0; i<metadata.length; i++) {
+        //     subject = metadata[i]
+
+        //     // Code block for when the match is found
+        //     if (id == subject.id) {
+                
+        //         // Loop through each key in the dictionary
+        //         for (let key in subject) {
+                    
+        //             // Create a paragraph element for each dictionary row
+        //             let pair = d3.select("#sample-metadata").append("p").text(`${key}: ${subject[key]}`);
+        //         };
+        //     };            
+        // };
     });
 };
 
