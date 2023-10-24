@@ -28,7 +28,7 @@ function get_data(subject_id) {
         });
 
         // Get the sample labels, reversed as above
-        let sample_labels = samples.map((sample) => (sample.otu_labels).slice(0, 10));
+        let sample_labels = samples.map((sample) => sample.otu_labels);
 
         // Get the index of the subject_id
         let subject_idx = names.indexOf(subject_id);
@@ -40,7 +40,7 @@ function get_data(subject_id) {
             y: sample_otuids[subject_idx].slice(0, 10).reverse(),
             type: "bar",
             orientation: "h",
-            name: sample_labels[subject_idx]
+            name: sample_labels[subject_idx].slice(0, 10)
         }];
     
         let bar_layout = {
