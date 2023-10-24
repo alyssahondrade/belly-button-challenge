@@ -100,6 +100,7 @@ function get_data(subject_id) {
         
         Plotly.plot("bubble", bubble_data, bubble_layout);
     });
+    console.log("THIS CODE JUST RAN");
 };
 
 //-------- FUNCTION TO CREATE THE METADATA CHART --------//
@@ -130,24 +131,31 @@ function subject_metadata(id) {
 };
 
 // Dynamically update the plot when the option is changed
-// d3.selectAll("#selDataset").on("change", updatePlotly);
+d3.selectAll("#selDataset").on("change", updatePlotly);
 
-// //-------- FUNCTION TO UPDATE THE PLOT --------//
-// function updatePlotly() {
-//     d3.json(samples_url).then(function(data) {
-//         // Import relevant JSON array
-//         var names = Object.values(data.names);
+//-------- FUNCTION TO UPDATE THE PLOT --------//
+function updatePlotly() {
+    d3.json(samples_url).then(function(data) {
+        // Import relevant JSON array
+        var names = Object.values(data.names);
 
-//         let dropdown_menu = d3.select("#selDataset");
-    
-//         // Add each subject id as an option
-//         for (let i=0; i<names.length; i++) {
-//             if (this.value === names[i]) {
-//                 get_data(names[i]);
-//             };
-//         };
-//     });
-// };
+        let dropdown_menu = d3.select("#selDataset");
+
+        console.log(this.onchange);
+        // Add each subject id as an option
+        for (let i=0; i<names.length; i++) {
+            if (this.value === names[i]) {
+                get_data(names[i]);
+            };
+        };
+    });
+};
+
+function optionChanged(id) {
+    get_data(id);
+    subject_metadata(id);
+};
+
 
 //-------- FUNCTION TO CREATE WEBPAGE --------//
 function init() {
