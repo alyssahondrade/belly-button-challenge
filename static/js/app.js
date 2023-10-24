@@ -1,24 +1,9 @@
 // Read the `samples.json` from the provided url
 const samples_url = "https://2u-data-curriculum-team.s3.amazonaws.com/dataviz-classroom/v1.1/14-Interactive-Web-Visualizations/02-Homework/samples.json";
 
-//-------- POPULATE THE DROPDOWN WITH OPTIONS --------//
-d3.json(samples_url).then(function(data) {
-    // Import relevant JSON array
-    var names = Object.values(data.names);
-    
-    let dropdown_menu = d3.select("#selDataset");
-    
-    for (let i=0; i<names.length; i++) {
-        let new_option = dropdown_menu.append("option");
-        new_option.attr("value", names[i]);
-        new_option.text(names[i]);
-    };
-});
-
 //-------- FUNCTION TO CREATE THE PLOTS PER ID --------//
-function get_data(subject_id) {
+function create_plots(subject_id) {
     d3.json(samples_url).then(function(data) {
-        
         // Import relevant JSON array
         var names = Object.values(data.names);
         var samples = Object.values(data.samples);
@@ -65,7 +50,7 @@ function get_data(subject_id) {
         }];
     
         let bar_layout = {
-            title: `Subject "${names[subject_idx]}" Top 10 Samples`,
+            title: `Subject "${names[subject_idx]}" Top 10 Samples`, // NOT ALWAYS TOP 10
             xaxis: {
                 title: {text: "Number of Samples"}
             },
@@ -78,8 +63,7 @@ function get_data(subject_id) {
         };
 
         Plotly.newPlot("bar", bar_data, bar_layout);
-
-
+        
         //-------- CREATE THE BUBBLE CHART --------//
         let bubble_data = [{
             x: sample_otuids[subject_idx],
@@ -138,37 +122,42 @@ function subject_metadata(id) {
     });
 };
 
-// Dynamically update the plot when the option is changed
-d3.selectAll("#selDataset").on("change", updatePlotly);
+//-------- FUNCTION TO CREATE THE GAUGE --------//
+// function create_gauge(id) {
+//     // Populate the dropdown with options
+//     d3.json(samples_url).then(
+// };
 
-//-------- FUNCTION TO UPDATE THE PLOT --------//
-function updatePlotly() {
-    d3.json(samples_url).then(function(data) {
-        // Import relevant JSON array
-        var names = Object.values(data.names);
-
-        let dropdown_menu = d3.select("#selDataset");
-
-        // console.log(this.onchange);
-        // Add each subject id as an option
-        for (let i=0; i<names.length; i++) {
-            if (this.value === names[i]) {
-                get_data(names[i]);
-            };
-        };
-    });
-};
 
 function optionChanged(id) {
-    get_data(id);
+    create_plots(id);
     subject_metadata(id);
+    // create_gauge(id);
 };
 
 
 //-------- FUNCTION TO CREATE WEBPAGE --------//
 function init() {
-    get_data("940");
-    subject_metadata("940");
+    // Populate the dropdown with options
+    d3.json(samples_url).then(function(data) {
+        // Import relevant JSON array
+        var names = Object.values(data.names);
+
+        // Isolate the dropdown menu in the html
+        let dropdown_menu = d3.select("#selDataset");
+
+        // Use a for-loop to create a new option
+        for (let i=0; i<names.length; i++) {
+            let new_option = dropdown_menu.append("option");
+            new_option.attr("value", names[i]);
+            new_option.text(names[i]);
+        };
+
+        // Call the functions to populate the webpage
+        create_plots(names[0]);
+        subject_metadata(names[0]);
+        // create_gauge(names[0]);
+    });
 };
 
 init();
