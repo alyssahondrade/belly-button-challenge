@@ -14,7 +14,10 @@ function get_data(subject_id) {
         let sample_values = samples.map((sample) => sample.sample_values);
         
         // Get the otu_ids
-        let sample_otuids = samples.map(function(sample) {
+        let sample_otuids = samples.map((sample) => sample.otu_ids);
+
+        // Get otu_ids with "OTU " prefixed to each one        
+        let edited_otuids = samples.map(function(sample) {
             
             // Get the corresponding top 10 otu_ids
             let top_ids = sample.otu_ids;
@@ -37,16 +40,16 @@ function get_data(subject_id) {
         //-------- CREATE THE BAR CHART --------//
         let bar_data = [{
             x: sample_values[subject_idx].slice(0, 10).reverse(),
-            y: sample_otuids[subject_idx].slice(0, 10).reverse(),
+            y: edited_otuids[subject_idx].slice(0, 10).reverse(),
             type: "bar",
             orientation: "h",
             name: sample_labels[subject_idx].slice(0, 10)
         }];
     
         let bar_layout = {
-            title: `Subject "${names[subject_idx]}" Samples`,
+            title: `Subject "${names[subject_idx]}" Top 10 Samples`,
             xaxis: {
-                title: {text: "Sample Values"}
+                title: {text: "Number of Samples"}
             },
             yaxis: {
                 title: {text: "IDs", standoff: 10},
@@ -55,30 +58,33 @@ function get_data(subject_id) {
                 ticklen: 10
             }
         };
-    
-        // Create the plot
+
         Plotly.plot("bar", bar_data, bar_layout);
 
         //-------- CREATE THE BUBBLE CHART --------//
-        // let bubble_values = samples.map((sample) => (sample.sample_values))[0];
-        // let bubble_ids = samples.map((sample) => (sample.otu_ids))[0];
-        // let bubble_labels = samples.map((sample) => (sample.otu_labels))[0];
-        
-        // let bubble_trace = {
-        //     x: bubble_ids,
-        //     y: bubble_values,
-        //     mode: "markers",
-        //     marker: {
-        //         size: bubble_values,
-        //         color: bubble_ids
-        //     },
-        //     text: bubble_labels
-        // };
-        
-        // let bubble_data = [bubble_trace];
-        
-        // Plotly.plot("bubble", bubble_data);
+        let bubble_data = [{
+            x: sample_otuids[subject_idx],
+            y: sample_values[subject_idx],
+            mode: "markers",
+            marker: {
+                size: sample_values[subject_idx],
+                color: sample_otuids[subject_idx]
+            },
+            text: sample_labels[subject_idx]
+        }];
 
+        let bubble_layout = {
+            title: `Subject "${names[subject_idx]}" Biodiversity`,
+            xaxis: {
+                title: "OTU IDs"
+            },
+            yaxis: {
+                title: {text: "Number of Samples"},
+                automargin: true
+            }
+        };
+        
+        Plotly.plot("bubble", bubble_data, bubble_layout);
     });
 };
 
