@@ -1,7 +1,7 @@
 // Read the `samples.json` from the provided url
 const samples_url = "https://2u-data-curriculum-team.s3.amazonaws.com/dataviz-classroom/v1.1/14-Interactive-Web-Visualizations/02-Homework/samples.json";
 
-//-------- FUNCTION TO GET THE DATA --------//
+//-------- FUNCTION TO CREATE THE PLOTS PER ID --------//
 function get_data(subject_id) {
     d3.json(samples_url).then(function(data) {
         
@@ -9,8 +9,9 @@ function get_data(subject_id) {
         var names = Object.values(data.names);
         var samples = Object.values(data.samples);
 
+        //-------- PARSE THE VALUES --------//
         // Get the first 10 results for each sample_value and reverse the list
-        let sample_values = samples.map((sample) => (sample.sample_values).slice(0,10).reverse());
+        let sample_values = samples.map((sample) => sample.sample_values);
         
         // Get the otu_ids
         let sample_otuids = samples.map(function(sample) {
@@ -33,16 +34,16 @@ function get_data(subject_id) {
         let subject_idx = names.indexOf(subject_id);
         console.log(subject_idx);
 
-        // Create the bar chart
+        //-------- CREATE THE BAR CHART --------//
         let bar_data = [{
-            x: sample_values[subject_idx],
+            x: sample_values[subject_idx].slice(0,10).reverse(),
             y: sample_otuids[subject_idx],
             type: "bar",
             orientation: "h",
             name: sample_labels[subject_idx]
         }];
     
-        let layout = {
+        let bar_layout = {
             title: `Subject "${names[subject_idx]}" Samples`,
             xaxis: {
                 title: {text: "Sample Values"}
@@ -56,10 +57,28 @@ function get_data(subject_id) {
         };
     
         // Create the plot
-        Plotly.plot("bar", bar_data, layout);
+        Plotly.plot("bar", bar_data, bar_layout);
 
-        // console.log(sample_values[subject_idx]);
-        // return[sample_values[subject_id], sample_otuids[subject_id], sample_labels[subject_id]];
+        //-------- CREATE THE BUBBLE CHART --------//
+        // let bubble_values = samples.map((sample) => (sample.sample_values))[0];
+        // let bubble_ids = samples.map((sample) => (sample.otu_ids))[0];
+        // let bubble_labels = samples.map((sample) => (sample.otu_labels))[0];
+        
+        // let bubble_trace = {
+        //     x: bubble_ids,
+        //     y: bubble_values,
+        //     mode: "markers",
+        //     marker: {
+        //         size: bubble_values,
+        //         color: bubble_ids
+        //     },
+        //     text: bubble_labels
+        // };
+        
+        // let bubble_data = [bubble_trace];
+        
+        // Plotly.plot("bubble", bubble_data);
+
     });
 };
 
@@ -101,8 +120,7 @@ function init() {
     //     // Create the plot
     //     Plotly.plot("bar", bar_data);
     // });
-    let output = get_data("940");
-    console.log(output);
+    get_data("940");
 };
 
 init();
