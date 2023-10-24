@@ -17,14 +17,14 @@ function get_data(subject_id) {
         let sample_otuids = samples.map(function(sample) {
             
             // Get the corresponding top 10 otu_ids
-            let top_ids = sample.otu_ids.slice(0, 10);
+            let top_ids = sample.otu_ids;
     
             // Create a list to hold the transformed list
             let id_list = []
             let add_otu = top_ids.map((id) => id_list.push("OTU " + id));
     
             // Reverse the list to match the sample_values list, for plotting
-            return id_list.reverse();
+            return id_list;
         });
 
         // Get the sample labels, reversed as above
@@ -36,8 +36,8 @@ function get_data(subject_id) {
 
         //-------- CREATE THE BAR CHART --------//
         let bar_data = [{
-            x: sample_values[subject_idx].slice(0,10).reverse(),
-            y: sample_otuids[subject_idx],
+            x: sample_values[subject_idx].slice(0, 10).reverse(),
+            y: sample_otuids[subject_idx].slice(0, 10).reverse(),
             type: "bar",
             orientation: "h",
             name: sample_labels[subject_idx]
