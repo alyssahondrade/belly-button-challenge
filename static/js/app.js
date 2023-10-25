@@ -145,6 +145,36 @@ function create_gauge(id) {
         let max_wfreq = Math.max(...wfreq_nums);
         console.log(max_wfreq);
 
+        // Function to generate a gradient array based on an initial and final color
+        function generateGradientArray(startColor, endColor, steps) {
+            let gradientArray = [];
+            for (let i = 0; i < steps; i++) {
+                let r = Math.round(startColor[0] + i * (endColor[0] - startColor[0]) / steps);
+                let g = Math.round(startColor[1] + i * (endColor[1] - startColor[1]) / steps);
+                let b = Math.round(startColor[2] + i * (endColor[2] - startColor[2]) / steps);
+                gradientArray.push(`rgb(${r},${g},${b})`);
+            }
+            return gradientArray;
+        }
+        
+        // Define the initial and final colors
+        const startColor = [255, 0, 0]; // Red
+        const endColor = [0, 0, 255]; // Blue
+        const steps = max_wfreq; // Number of steps in the gradient
+        
+        // Generate the gradient array
+        const gradientArray = generateGradientArray(startColor, endColor, steps);
+        
+        // Print the gradient array
+        console.log(gradientArray);
+
+        let steps_array = []
+        for (let i=0; i<max_wfreq; i++) {
+            let new_range = {range: [i, i+1], color: gradientArray[i]};
+            steps_array.push(new_range);
+        };
+        console.log(steps_array);
+        
         // Use filter to find the correct subject id
         function find_id(subject) {
             return(subject.id === parseInt(id));
@@ -163,9 +193,10 @@ function create_gauge(id) {
     		mode: "gauge+number",
             gauge: {
                 shape: "angular",
-                axis: {
-                    range: [0, max_wfreq]}
-            }
+                axis: {range: [0, max_wfreq]},
+                // steps: [{range: [0, 1], color: "blue"}]
+                steps: steps_array
+                }
     	}];
     
         // var layout = { width: 600, height: 500, margin: { t: 0, b: 0 } };
@@ -179,6 +210,8 @@ function optionChanged(id) {
     subject_metadata(id);
     create_gauge(id);
 };
+
+
 
 
 //-------- FUNCTION TO CREATE WEBPAGE --------//
