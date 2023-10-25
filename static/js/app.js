@@ -123,16 +123,61 @@ function subject_metadata(id) {
 };
 
 //-------- FUNCTION TO CREATE THE GAUGE --------//
-// function create_gauge(id) {
-//     // Populate the dropdown with options
-//     d3.json(samples_url).then(
-// };
+function create_gauge(id) {
+    // Populate the dropdown with options
+    d3.json(samples_url).then(function(data) {
+        
+        // Import relevant JSON array
+        var metadata = Object.values(data.metadata);
+
+        // Find the maximum wfreq
+        let wfreq_list = metadata.map((subject) => parseInt(subject.wfreq));
+        // let wfreq_list = metadata.map((subject) => subject.wfreq);
+        let wfreq_nums = wfreq_list.filter(element => element); // only passes non-null
+
+        console.log(wfreq_list);
+        console.log(wfreq_nums);
+
+        for (let i=0; i<wfreq_nums.length; i++) {
+            console.log(typeof(wfreq_nums[i]));
+        };
+
+        let max_wfreq = Math.max(...wfreq_nums);
+        console.log(max_wfreq);
+
+        // Use filter to find the correct subject id
+        function find_id(subject) {
+            return(subject.id === parseInt(id));
+        };
+
+        let subject_metadata = metadata.filter(find_id)[0];
+        console.log(subject_metadata);
+
+        var gauge_data = [{
+    		// domain: { x: [0, max_wfreq], y: [0, max_wfreq] },
+    		value: subject_metadata.wfreq,
+    		title: {
+                text: "<b>Belly Button Washing Frequency</b><br>Scrubs per Week"
+            },
+    		type: "indicator",
+    		mode: "gauge+number",
+            gauge: {
+                shape: "angular",
+                axis: {
+                    range: [0, max_wfreq]}
+            }
+    	}];
+    
+        // var layout = { width: 600, height: 500, margin: { t: 0, b: 0 } };
+        Plotly.newPlot("gauge", gauge_data);
+    });
+};
 
 
 function optionChanged(id) {
     create_plots(id);
     subject_metadata(id);
-    // create_gauge(id);
+    create_gauge(id);
 };
 
 
@@ -156,7 +201,7 @@ function init() {
         // Call the functions to populate the webpage
         create_plots(names[0]);
         subject_metadata(names[0]);
-        // create_gauge(names[0]);
+        create_gauge(names[0]);
     });
 };
 
