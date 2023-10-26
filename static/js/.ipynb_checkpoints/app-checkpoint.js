@@ -184,21 +184,23 @@ function create_gauge(id) {
                 // shape: "angular",
                 axis: {
                     range: [0, max_wfreq],
-                    tickmode: "linear"                    
-                    // showticklabels: false,
-                    // tickcolor: "transparent"
+                    tickmode: "linear",
+                    showticklabels: false,
+                    tickcolor: "transparent"
                 },
                 steps: steps_array,
                 bordercolor: "transparent",
                 bar: {color: "transparent"}
-                },
-            marker: {text: ["0-1", "1-2", "2-3", "3-4", "4-5", "5-6", "6-7", "7-8", "8-9"]}
+                }
+            // marker: {text: ["0-1", "1-2", "2-3", "3-4", "4-5", "5-6", "6-7", "7-8", "8-9"]}
     	}];
 
-        function label_coords() {
-            const gauge_radius = 0.4;
-            const centre_xcoord = 0.5;
-            const centre_ycoord = 0.5;
+        function label_coords(mode) {
+            // Constants to account for positioning on the gauge
+            const arrow_length = 0.025;
+            const gauge_radius = 0.45 - arrow_length;
+            const centre_xcoord = 0.5 + arrow_length;
+            const centre_ycoord = -0.2;
             
             // Get the x and y coordinates for the annotation
             let x_coords = []
@@ -210,58 +212,41 @@ function create_gauge(id) {
                 let sector = i + 1; // Since don't want to multiply by 0
                 console.log(sector_angle*(sector));
 
-                let x_val = centre_xcoord + gauge_radius*Math.cos(sector_angle*(sector));
-                let y_val = centre_ycoord + gauge_radius*Math.sin(sector_angle*(sector));
+                let x_val = centre_xcoord + Math.cos(sector_angle*sector) * gauge_radius;
+                let y_val = centre_ycoord + Math.sin(sector_angle*sector) * (1 - arrow_length*2);
+                
                 x_coords.push(Math.round(x_val*100)/100);
                 y_coords.push(Math.round(y_val*100)/100);
 
-                console.log(`${i}-${i+1}`);
+                console.log(`${max_wfreq-i-1}-${max_wfreq-i}`);
 
                 let label_obj = {
                     x: Math.round(x_val*100)/100,
                     y: Math.round(y_val*100)/100,
-                    text: `${i}-${i+1}`,
-                    showarrow: false
+                    // text: `${i}-${i+1}`,
+                    text: `${max_wfreq-i-1}-${max_wfreq-i}`,
+                    showarrow: true,
+                    arrowcolor: "transparent"
                 };
                 output_list.push(label_obj);
-                
+    
+                console.log("x-coords", x_coords);
+                console.log("y-coords", y_coords);
             };
-
-            console.log("x-coords", x_coords);
-            console.log("y-coords", y_coords);
-            return(output_list);
-            
+            if (mode === "labels") {
+                return(output_list);
+            }
+            else if (mode === "needle") {
+                return([x_val, y_val]);
+            };
         };
-        let annotation_list = label_coords();
+        let annotation_list = label_coords("labels");
         
         var gauge_layout = {
-            annotations: annotation_list
-            // annotations: [
-            //     {
-            //         x: 0.12,
-            //         y: 0.12,
-            //         text: "0-1",
-            //         showarrow: true
-            //     },
-            //     {
-            //         x: 0.18,
-            //         y: 0.24,
-            //         text: "1-2",
-            //         showarrow: true
-            //     },
-            //     {
-            //         x: 0.82,
-            //         y: 0.24,
-            //         text: "2-3",
-            //         showarrow: true
-            //     },
-            //     {
-            //         x: 0.88,
-            //         y: 0.12,
-            //         text: "8-9",
-            //         showarrow: true
-            //     },
-            // ]
+            annotations: annotation_list,
+            shapes: {
+                type: "path"
+            }
         };
 
         Plotly.newPlot("gauge", gauge_data, gauge_layout);
