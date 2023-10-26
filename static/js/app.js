@@ -149,6 +149,7 @@ function create_gauge(id) {
                 // Convert the rgb array to this format: `rgb(r-val, g-val, b-val)`
                 output_array.push(`rgb(${rgb_array})`);
             };
+            output_array.push("rgba(0, 0, 0, 0)");
             return(output_array);
         };
 
@@ -160,7 +161,7 @@ function create_gauge(id) {
         // Create the steps array
         let steps_array = []
         for (let i=0; i<max_wfreq; i++) {
-            let new_range = {range: [i, i+1], color: gradientArray[i], thickness:1};
+            let new_range = {range: [i, i+1], color: gradientArray[i]};
             steps_array.push(new_range);
         };
         
@@ -172,28 +173,42 @@ function create_gauge(id) {
         let subject_metadata = metadata.filter(find_id)[0];
         console.log(subject_metadata);
 
-        var gauge_data = [{
-    		// domain: { x: [0, max_wfreq], y: [0, max_wfreq] },
-    		value: subject_metadata.wfreq,
-    		title: {
-                text: "<b>Belly Button Washing Frequency</b><br>Scrubs per Week"
-            },
-    		type: "indicator",
-    		mode: "gauge+number",
-            gauge: {
-                // shape: "angular",
-                axis: {
-                    range: [0, max_wfreq],
-                    tickmode: "linear",
-                    showticklabels: false,
-                    tickcolor: "transparent"
-                },
-                steps: steps_array,
-                bordercolor: "transparent",
-                bar: {color: "transparent"}
-                }
-            // marker: {text: ["0-1", "1-2", "2-3", "3-4", "4-5", "5-6", "6-7", "7-8", "8-9"]}
-    	}];
+     //    var gauge_data = [{
+    	// 	// domain: { x: [0, max_wfreq], y: [0, max_wfreq] },
+    	// 	value: subject_metadata.wfreq,
+    	// 	title: {
+     //            text: "<b>Belly Button Washing Frequency</b><br>Scrubs per Week"
+     //        },
+    	// 	type: "indicator",
+    	// 	mode: "gauge+number",
+     //        gauge: {
+     //            // shape: "angular",
+     //            axis: {
+     //                range: [0, max_wfreq],
+     //                tickmode: "linear",
+     //                showticklabels: false,
+     //                tickcolor: "transparent"
+     //            },
+     //            steps: steps_array,
+     //            bordercolor: "transparent",
+     //            bar: {color: "transparent"}
+     //            }
+     //        // marker: {text: ["0-1", "1-2", "2-3", "3-4", "4-5", "5-6", "6-7", "7-8", "8-9"]}
+    	// }];
+
+        let gauge_data = [{
+            type: "pie",
+            values: [100/9, 100/9, 100/9, 100/9, 100/9, 100/9, 100/9, 100/9, 100/9, 100],
+            text: ["0-1", "1-2", "2-3", "3-4", "4-5", "5-6", "6-7", "7-8", "8-9", ""],
+            direction: "clockwise",
+            textinfo: "text",
+            textposition: "inside",
+            marker: {colors: gradientArray},
+            labels: ["0-1", "1-2", "2-3", "3-4", "4-5", "5-6", "6-7", "7-8", "8-9", ""],
+            hole: 0.4,
+            rotation: 90,
+            showlegend: false
+        }];
 
         function label_coords(mode) {
             // Constants to account for positioning on the gauge
@@ -242,14 +257,14 @@ function create_gauge(id) {
         };
         let annotation_list = label_coords("labels");
         
-        var gauge_layout = {
-            annotations: annotation_list,
-            shapes: {
-                type: "path"
-            }
-        };
+        // var gauge_layout = {
+        //     annotations: annotation_list,
+        //     shapes: {
+        //         type: "path"
+        //     }
+        // };
 
-        Plotly.newPlot("gauge", gauge_data, gauge_layout);
+        Plotly.newPlot("gauge", gauge_data);
     });
 };
 
