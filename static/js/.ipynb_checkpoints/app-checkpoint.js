@@ -264,7 +264,11 @@ function create_gauge(id) {
         //     }
         // };
 
-        Plotly.newPlot("gauge", gauge_data);
+        let gauge_layout = {
+            title: {text: "<b>Belly Button Washing Frequency</b><br>Scrubs per Week"}
+        };
+        
+        Plotly.newPlot("gauge", gauge_data, gauge_layout);
     });
 };
 
