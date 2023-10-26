@@ -135,16 +135,56 @@ function create_gauge(id) {
         // let wfreq_list = metadata.map((subject) => subject.wfreq);
         let wfreq_nums = wfreq_list.filter(element => element); // only passes non-null
 
-        console.log(wfreq_list);
-        console.log(wfreq_nums);
+        // console.log(wfreq_list);
+        // console.log(wfreq_nums);
 
         for (let i=0; i<wfreq_nums.length; i++) {
             console.log(typeof(wfreq_nums[i]));
         };
 
         let max_wfreq = Math.max(...wfreq_nums);
-        console.log(max_wfreq);
+        // console.log(max_wfreq);
 
+        // Create an opacity varying colour array
+        function opacity_array(rgb_array, steps) {
+            let colours = [];
+            for (let i=0; i<steps; i++) {
+                // console.log(rgb_array, i/10);
+                // console.log(rgb_array.push(i/10));
+                let updated_rgb = []
+                for (let j=0; j<rgb_array.length; j++) {
+                    updated_rgb.push(rgb_array[j]);
+                };
+                updated_rgb.push(i/steps + 1/steps);
+                colours.push(updated_rgb);
+            };
+            console.log(colours);
+            return(colours);
+        };
+
+        let opaque_array = opacity_array([255, 0, 0], max_wfreq);
+        console.log("Opaque Array", opaque_array);
+
+        function gradient(start_rgb, end_rgb, steps) {
+            let output_array = [];
+            for (let i=0; i<steps; i++) {
+                let rgb_array = []
+                for (let j=0; j<start_rgb.length; j++) {
+                    rgb_array.push(Math.round(start_rgb[j] + i*(end_rgb[j] - start_rgb[j])/steps));
+                };
+                console.log(`rgb {i}`, rgb_array);
+
+                console.log("STRING VERSION: ", String(rgb_array));
+                output_array.push(`rgb(${rgb_array})`);
+            };
+            return(output_array);
+        };
+        gradient([245,245,220], [144,238,144], max_wfreq);
+
+
+
+
+        
         // Function to generate a gradient array based on an initial and final color
         function generateGradientArray(startColor, endColor, steps) {
             let gradientArray = [];
@@ -163,17 +203,18 @@ function create_gauge(id) {
         const steps = max_wfreq; // Number of steps in the gradient
         
         // Generate the gradient array
-        const gradientArray = generateGradientArray(startColor, endColor, steps);
+        // const gradientArray = generateGradientArray(startColor, endColor, steps);
+        gradientArray = gradient([245,245,220], [143,188,143], max_wfreq) // beige -> darkseagreen
         
         // Print the gradient array
-        console.log(gradientArray);
+        // console.log(gradientArray);
 
         let steps_array = []
         for (let i=0; i<max_wfreq; i++) {
             let new_range = {range: [i, i+1], color: gradientArray[i]};
             steps_array.push(new_range);
         };
-        console.log(steps_array);
+        console.log("STEPS ARRAY", steps_array);
         
         // Use filter to find the correct subject id
         function find_id(subject) {
@@ -190,16 +231,38 @@ function create_gauge(id) {
                 text: "<b>Belly Button Washing Frequency</b><br>Scrubs per Week"
             },
     		type: "indicator",
-    		mode: "gauge+number",
+    		mode: "gauge",
             gauge: {
                 shape: "angular",
-                axis: {range: [0, max_wfreq]},
+                bar: {color: "dark blue"},
+                axis: {
+                    range: [0, max_wfreq],
+                tickmode: "linear"},
                 // steps: [{range: [0, 1], color: "blue"}]
-                steps: steps_array
+                // steps: steps_array
+                // steps: opacity_array([255, 0, 0], max_wfreq)
+                // steps: opaque_array
+                // steps: [
+                    // {range: [0,1], color: "rgb(255, 0, 0, 0.11)"},
+                    // {range: [1,2], color: "rgb(255, 0, 0, 0.22)"},
+                    // {range: [2,3], color: "rgb(255, 0, 0, 0.33)"},
+                    // {range: [3,4], color: "rgb(255, 0, 0, 0.44)"},
+                    // {range: [4,5], color: "rgb(255, 0, 0, 0.55)"},
+                    // {range: [0,1], color: "rgb(255, 0, 0)", opacity: 0.1},
+                    // {range: [1,2], color: "rgb(255, 0, 0)", opacity: 0.2},
+                    // {range: [2,3], color: "rgb(255, 0, 0)", opacity: 0.3},
+                    // {range: [3,4], color: "rgb(255, 0, 0)", opacity: 0.4},
+                    // {range: [4,5], color: "rgb(255, 0, 0)", opacity: 0.5},
+                    // {range: [0,1], color: "rgb(245,245,220)"} //beige
+                    // light green: rgb(144,238,144)
+                // ]
+                steps: steps_array,
+                bordercolor: "white"
                 }
     	}];
     
         // var layout = { width: 600, height: 500, margin: { t: 0, b: 0 } };
+
         Plotly.newPlot("gauge", gauge_data);
     });
 };
