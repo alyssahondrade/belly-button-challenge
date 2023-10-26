@@ -132,89 +132,37 @@ function create_gauge(id) {
 
         // Find the maximum wfreq
         let wfreq_list = metadata.map((subject) => parseInt(subject.wfreq));
-        // let wfreq_list = metadata.map((subject) => subject.wfreq);
         let wfreq_nums = wfreq_list.filter(element => element); // only passes non-null
+        let max_wfreq = Math.max(...wfreq_nums); // spread operator to expand iterable
 
-        // console.log(wfreq_list);
-        // console.log(wfreq_nums);
-
-        for (let i=0; i<wfreq_nums.length; i++) {
-            console.log(typeof(wfreq_nums[i]));
-        };
-
-        let max_wfreq = Math.max(...wfreq_nums);
-        // console.log(max_wfreq);
-
-        // Create an opacity varying colour array
-        function opacity_array(rgb_array, steps) {
-            let colours = [];
-            for (let i=0; i<steps; i++) {
-                // console.log(rgb_array, i/10);
-                // console.log(rgb_array.push(i/10));
-                let updated_rgb = []
-                for (let j=0; j<rgb_array.length; j++) {
-                    updated_rgb.push(rgb_array[j]);
-                };
-                updated_rgb.push(i/steps + 1/steps);
-                colours.push(updated_rgb);
-            };
-            console.log(colours);
-            return(colours);
-        };
-
-        let opaque_array = opacity_array([255, 0, 0], max_wfreq);
-        console.log("Opaque Array", opaque_array);
-
+        // Create a function that will create a gradient array given rgb values
         function gradient(start_rgb, end_rgb, steps) {
             let output_array = [];
             for (let i=0; i<steps; i++) {
                 let rgb_array = []
+
+                // Get the rgb values in array form
                 for (let j=0; j<start_rgb.length; j++) {
                     rgb_array.push(Math.round(start_rgb[j] + i*(end_rgb[j] - start_rgb[j])/steps));
                 };
-                console.log(`rgb {i}`, rgb_array);
 
-                console.log("STRING VERSION: ", String(rgb_array));
+                // Convert the rgb array to this format: `rgb(r-val, g-val, b-val)`
                 output_array.push(`rgb(${rgb_array})`);
             };
             return(output_array);
         };
-        gradient([245,245,220], [144,238,144], max_wfreq);
 
-
-
-
-        
-        // Function to generate a gradient array based on an initial and final color
-        function generateGradientArray(startColor, endColor, steps) {
-            let gradientArray = [];
-            for (let i = 0; i < steps; i++) {
-                let r = Math.round(startColor[0] + i * (endColor[0] - startColor[0]) / steps);
-                let g = Math.round(startColor[1] + i * (endColor[1] - startColor[1]) / steps);
-                let b = Math.round(startColor[2] + i * (endColor[2] - startColor[2]) / steps);
-                gradientArray.push(`rgb(${r},${g},${b})`);
-            }
-            return gradientArray;
-        }
-        
-        // Define the initial and final colors
-        const startColor = [255, 0, 0]; // Red
-        const endColor = [0, 0, 255]; // Blue
-        const steps = max_wfreq; // Number of steps in the gradient
-        
         // Generate the gradient array
-        // const gradientArray = generateGradientArray(startColor, endColor, steps);
-        gradientArray = gradient([245,245,220], [143,188,143], max_wfreq) // beige -> darkseagreen
-        
-        // Print the gradient array
-        // console.log(gradientArray);
+        const start_colour = [245,245,220] // beige
+        const end_colour = [143,188,143] // dark sea green
+        const gradientArray = gradient(start_colour, end_colour, max_wfreq) // beige -> darkseagreen
 
+        // Create the steps array
         let steps_array = []
         for (let i=0; i<max_wfreq; i++) {
-            let new_range = {range: [i, i+1], color: gradientArray[i]};
+            let new_range = {range: [i, i+1], color: gradientArray[i], thickness:1};
             steps_array.push(new_range);
         };
-        console.log("STEPS ARRAY", steps_array);
         
         // Use filter to find the correct subject id
         function find_id(subject) {
@@ -231,39 +179,92 @@ function create_gauge(id) {
                 text: "<b>Belly Button Washing Frequency</b><br>Scrubs per Week"
             },
     		type: "indicator",
-    		mode: "gauge",
+    		mode: "gauge+number",
             gauge: {
-                shape: "angular",
-                bar: {color: "dark blue"},
+                // shape: "angular",
                 axis: {
                     range: [0, max_wfreq],
-                tickmode: "linear"},
-                // steps: [{range: [0, 1], color: "blue"}]
-                // steps: steps_array
-                // steps: opacity_array([255, 0, 0], max_wfreq)
-                // steps: opaque_array
-                // steps: [
-                    // {range: [0,1], color: "rgb(255, 0, 0, 0.11)"},
-                    // {range: [1,2], color: "rgb(255, 0, 0, 0.22)"},
-                    // {range: [2,3], color: "rgb(255, 0, 0, 0.33)"},
-                    // {range: [3,4], color: "rgb(255, 0, 0, 0.44)"},
-                    // {range: [4,5], color: "rgb(255, 0, 0, 0.55)"},
-                    // {range: [0,1], color: "rgb(255, 0, 0)", opacity: 0.1},
-                    // {range: [1,2], color: "rgb(255, 0, 0)", opacity: 0.2},
-                    // {range: [2,3], color: "rgb(255, 0, 0)", opacity: 0.3},
-                    // {range: [3,4], color: "rgb(255, 0, 0)", opacity: 0.4},
-                    // {range: [4,5], color: "rgb(255, 0, 0)", opacity: 0.5},
-                    // {range: [0,1], color: "rgb(245,245,220)"} //beige
-                    // light green: rgb(144,238,144)
-                // ]
+                    tickmode: "linear"                    
+                    // showticklabels: false,
+                    // tickcolor: "transparent"
+                },
                 steps: steps_array,
-                bordercolor: "white"
-                }
+                bordercolor: "transparent",
+                bar: {color: "transparent"}
+                },
+            marker: {text: ["0-1", "1-2", "2-3", "3-4", "4-5", "5-6", "6-7", "7-8", "8-9"]}
     	}];
-    
-        // var layout = { width: 600, height: 500, margin: { t: 0, b: 0 } };
 
-        Plotly.newPlot("gauge", gauge_data);
+        function label_coords() {
+            const gauge_radius = 0.4;
+            const centre_xcoord = 0.5;
+            const centre_ycoord = 0.5;
+            
+            // Get the x and y coordinates for the annotation
+            let x_coords = []
+            let y_coords = []
+            let output_list = []
+            
+            for (let i=0; i<max_wfreq; i++) {
+                const sector_angle = 360/(2*(max_wfreq+1)) * Math.PI/180; // Angle in radians
+                let sector = i + 1; // Since don't want to multiply by 0
+                console.log(sector_angle*(sector));
+
+                let x_val = centre_xcoord + gauge_radius*Math.cos(sector_angle*(sector));
+                let y_val = centre_ycoord + gauge_radius*Math.sin(sector_angle*(sector));
+                x_coords.push(Math.round(x_val*100)/100);
+                y_coords.push(Math.round(y_val*100)/100);
+
+                console.log(`${i}-${i+1}`);
+
+                let label_obj = {
+                    x: Math.round(x_val*100)/100,
+                    y: Math.round(y_val*100)/100,
+                    text: `${i}-${i+1}`,
+                    showarrow: false
+                };
+                output_list.push(label_obj);
+                
+            };
+
+            console.log("x-coords", x_coords);
+            console.log("y-coords", y_coords);
+            return(output_list);
+            
+        };
+        let annotation_list = label_coords();
+        
+        var gauge_layout = {
+            annotations: annotation_list
+            // annotations: [
+            //     {
+            //         x: 0.12,
+            //         y: 0.12,
+            //         text: "0-1",
+            //         showarrow: true
+            //     },
+            //     {
+            //         x: 0.18,
+            //         y: 0.24,
+            //         text: "1-2",
+            //         showarrow: true
+            //     },
+            //     {
+            //         x: 0.82,
+            //         y: 0.24,
+            //         text: "2-3",
+            //         showarrow: true
+            //     },
+            //     {
+            //         x: 0.88,
+            //         y: 0.12,
+            //         text: "8-9",
+            //         showarrow: true
+            //     },
+            // ]
+        };
+
+        Plotly.newPlot("gauge", gauge_data, gauge_layout);
     });
 };
 
