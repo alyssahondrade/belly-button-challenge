@@ -173,10 +173,22 @@ function create_gauge(id) {
         let subject_metadata = metadata.filter(find_id)[0];
         console.log(subject_metadata);
 
+        function get_gauge_values() {
+            let gauge_values = []
+            
+            for (let i=0; i<max_wfreq; i++) {
+                gauge_values.push(100/max_wfreq);
+            };
+            gauge_values.push(100);
+            
+            return(gauge_values);
+        };
+        console.log(get_gauge_values());
 
         let gauge_data = [{
             type: "pie",
-            values: [100/9, 100/9, 100/9, 100/9, 100/9, 100/9, 100/9, 100/9, 100/9, 100],
+            // values: [100/9, 100/9, 100/9, 100/9, 100/9, 100/9, 100/9, 100/9, 100/9, 100],
+            values: get_gauge_values(),
             text: ["0-1", "1-2", "2-3", "3-4", "4-5", "5-6", "6-7", "7-8", "8-9", ""],
             direction: "clockwise",
             textinfo: "text",
