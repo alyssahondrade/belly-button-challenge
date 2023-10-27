@@ -173,28 +173,40 @@ function create_gauge(id) {
         let subject_metadata = metadata.filter(find_id)[0];
         console.log(subject_metadata);
 
-        function get_gauge_values() {
+        function gauge_setup(mode) {
             let gauge_values = []
+            let gauge_labels = []
             
             for (let i=0; i<max_wfreq; i++) {
+                // Get the gauge values
                 gauge_values.push(100/max_wfreq);
+
+                // Get the gauge labels
+                gauge_labels.push(`${i}-${i+1}`);
             };
+
+            // Add the value for the "transparent" half
             gauge_values.push(100);
+            gauge_labels.push("");
+
+            if (mode === "values") {
+                return(gauge_values);
+            }
+            else if (mode === "labels") {
+                return(gauge_labels);
+            };
             
-            return(gauge_values);
         };
-        console.log(get_gauge_values());
 
         let gauge_data = [{
             type: "pie",
-            // values: [100/9, 100/9, 100/9, 100/9, 100/9, 100/9, 100/9, 100/9, 100/9, 100],
-            values: get_gauge_values(),
-            text: ["0-1", "1-2", "2-3", "3-4", "4-5", "5-6", "6-7", "7-8", "8-9", ""],
+            values: gauge_setup("values"),
+            text: gauge_setup("labels"),
             direction: "clockwise",
             textinfo: "text",
             textposition: "inside",
             marker: {colors: gradientArray},
-            labels: ["0-1", "1-2", "2-3", "3-4", "4-5", "5-6", "6-7", "7-8", "8-9", ""],
+            labels: gauge_setup("labels"),
             hole: 0.5,
             rotation: 90,
             showlegend: false
