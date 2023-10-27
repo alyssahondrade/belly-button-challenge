@@ -245,53 +245,28 @@ function create_gauge(id) {
 
         function needle_path(gauge_value) {
             const needle_length = 0.15;
-            gauge_value = 3;
-            
-            // gauge_value = input_value + 1
+            gauge_value = 5;
 
-            // const sector_angle = 360 / (2 * (max_wfreq + 1)) * (Math.PI / 180); // angle in radians
-            // let sector_angle = gauge_value * (2 * Math.PI / gauge_setup("values")[0])/2; // angle in radians
-            // let needle_angle = 
-            // console.log(`one sector is ${360 / (2*max_wfreq)} degrees`);
-            let one_sector = 360 / (2*max_wfreq); // in degrees
-            // let needle_angle = gauge_value * one_sector * Math.PI / 180; // in radians
+            let one_sector = 360 / (2 * max_wfreq); // in degrees
+            console.log(`one_sector: ${one_sector}`);
             
             let sector_degrees = gauge_value * one_sector;
+            console.log(`sector_degrees: ${sector_degrees}`);
+            
             let needle_angle = sector_degrees * Math.PI / 180; // in radians
+            console.log(`needle_angle: ${needle_angle}`);
             
-            // if (sector_degrees <= 90) {
-                
-            //     // console.log("degrees", one_sector*gauge_value, "radians", needle_angle);
-            //     needle_angle = sector_degrees * Math.PI / 180; // in radians
-            //     x_val = 0.45 - needle_length * Math.cos(needle_angle);
-            // }
-            // else if (sector_degrees > 90) {
-            //     needle_angle = (180 - sector_degrees) * Math.PI / 180;
-            //     x_val = 0.45 + needle_length * Math.cos(needle_angle);
-            // }
-            
-            
-            
-            // let sector_degrees = gauge_value * gauge_setup("values")[0] * 3.6; // 1% = 3.6 degrees
-            // let needle_angle = sector_degrees * Math.PI / 180; // angle in radians
-
-            // let x_val = needle_length * Math.cos(0);
             let x_val = 0.5 - needle_length * Math.cos(needle_angle);
-            let y_val = needle_length * Math.sin(needle_angle) + 0.5; // to account for "transparent" half
+            let y_val = 0.5 + 2 * needle_length * Math.sin(needle_angle); // to account for "transparent" half
+            console.log(`x_val: ${x_val}`);
+            console.log(`y_val: ${y_val}`);
+
+            let x = Math.round(x_val*100)/100;
+            let y = Math.round(y_val*100)/100;
 
             console.log(x_val, y_val);
 
             return([x_val, y_val]);
-
-            // for (let i=0; i<max_wfreq; i++) {
-            //     const sector_angle = 360 / (2 * (max_wfreq + 1)) * (Math.PI / 180); // angle in radians
-            //     const sector_centre = sector_angle / 2;
-            //     let sector = i + 1;
-            //     console.log(sector_centre * sector);
-
-            //     let x_val = needle_length * Math.cos(sector_centre * sector);
-            //     let y_val = needle_length * Math.sin(sector_centre * sector);
-            // };
         };
 
         // for (let i=0; i<max_wfreq; i++) {
@@ -299,8 +274,6 @@ function create_gauge(id) {
         // };
         
         let needle_coords = needle_path(subject_metadata.wfreq);
-        // console.log("FREQUENCY: ", subject_metadata.wfreq, "NEEDLE COORDS", needle_coords);
-
 
         let gauge_data = [
             {
@@ -315,55 +288,42 @@ function create_gauge(id) {
                 hole: 0.5,
                 rotation: 90,
                 showlegend: false
-            // },
-            // {
-            //     type: "scatter",
-            //     x: [0.35, needle_coords[0]],
-            //     y: [0.35, needle_coords[1]],
-            //     mode: "lines",
-            //     line: {color: "black"}
             }];
         
         let gauge_layout = {
             title: {text: "<b>Belly Button Washing Frequency</b><br>Scrubs per Week"},
-            // shapes: [{
-            //     type: "line",
-            //     x0: 0.5,
-            //     y0: 0.5,
-            //     x1: 0.65,
-            //     y1: 0.5
-            // }]
-            shapes: [{
-                type: "path",
-                // path: `M 0.5 0.5 l 0.1 0.2`,
-                path: `M 0 0 L 0.5 0.5`,
-                fillcolor: "black",
-                line: {color: "black"}
-            },
-            {
-                type: "path",
-                path: `M 0.5 0.5 L 0.35 0.5`,
-                fillcolor: "red",
-                line: {color: "red"}
-            },
-            {
-                type: "path",
-                path: `M 0.5 0.5 L 0.43 0.76`,
-                fillcolor: "green",
-                line: {color: "green"}
-            },
-            {
-                type: "path",
-                path: `M 0.5 0.5 L 0.5 0.8`,
-                fillcolor: "purple",
-                line: {color: "purple"}
-            },
-            {
-                type: "path",
-                path: `M 0.5 0.5 L 0.36 0.6`,
-                fillcolor: "yellow",
-                line: {color: "yellow"}
-            },
+            shapes: [
+                // {
+            //     type: "path",
+            //     // path: `M 0.5 0.5 l 0.1 0.2`,
+            //     path: `M 0 0 L 0.5 0.5`,
+            //     fillcolor: "black",
+            //     line: {color: "black"}
+            // },
+            // {
+            //     type: "path",
+            //     path: `M 0.5 0.5 L 0.35 0.5`,
+            //     fillcolor: "red",
+            //     line: {color: "red"}
+            // },
+            // {
+            //     type: "path",
+            //     path: `M 0.5 0.5 L 0.43 0.76`,
+            //     fillcolor: "green",
+            //     line: {color: "green"}
+            // },
+            // {
+            //     type: "path",
+            //     path: `M 0.5 0.5 L 0.5 0.8`,
+            //     fillcolor: "purple",
+            //     line: {color: "purple"}
+            // },
+            // {
+            //     type: "path",
+            //     path: `M 0.5 0.5 L 0.36 0.6`,
+            //     fillcolor: "yellow",
+            //     line: {color: "yellow"}
+            // },
             {
                 type: "path",
                 path: `M 0.5 0.5 L ${needle_coords[0]} ${needle_coords[1]}`,
