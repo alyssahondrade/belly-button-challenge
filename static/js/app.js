@@ -244,7 +244,7 @@ function create_gauge(id) {
             shapes: [
             {
                 type: "path",
-                path: `M 0.49 0.5 L ${needle_coords[0]} ${needle_coords[1]} L 0.51 0.5`,
+                path: `M 0.49 0.5 L ${needle_coords[0]} ${needle_coords[1]} L 0.51 0.51`,
                 fillcolor: "maroon",
                 line: {color: "maroon"}
             },
