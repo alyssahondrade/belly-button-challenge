@@ -291,19 +291,20 @@ function create_gauge(id) {
             shapes: [
             {
                 type: "path",
-                path: `M 0.5 0.5 L ${needle_coords[0]} ${needle_coords[1]}`,
+                path: `M 0.49 0.5 L ${needle_coords[0]} ${needle_coords[1]} L 0.51 0.5`,
                 fillcolor: "maroon",
-                line: {color: "blue"}
-            // },
-            // {
-            //     type: "circle",
-            //     xref: 0.5,
-            //     yref: 0.5,
-            //     fillcolor: "blue",
-            //     x0: 0.48,
-            //     y0: 0.48,
-            //     x1: 0.52,
-            //     y1: 0.51
+                line: {color: "maroon"}
+            },
+            {
+                type: "circle",
+                xref: 0.5,
+                yref: 0.5,
+                fillcolor: "maroon",
+                line: {color: "maroon"},
+                x0: 0.49,
+                y0: 0.48,
+                x1: 0.51,
+                y1: 0.52
             }]
         };
         
