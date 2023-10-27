@@ -131,8 +131,8 @@ function create_gauge(id) {
         var metadata = Object.values(data.metadata);
 
         // Find the maximum wfreq
-        let wfreq_list = metadata.map((subject) => parseInt(subject.wfreq));
-        let wfreq_nums = wfreq_list.filter(element => element); // only passes non-null
+        let wfreq_list = metadata.map((subject) => parseInt(subject.wfreq)); // convert to integer
+        let wfreq_nums = wfreq_list.filter(element => element); // only pass non-null
         let max_wfreq = Math.max(...wfreq_nums); // spread operator to expand iterable
 
         // Create a function that will create a gradient array given rgb values
@@ -149,7 +149,7 @@ function create_gauge(id) {
                 // Convert the rgb array to this format: `rgb(r-val, g-val, b-val)`
                 output_array.push(`rgb(${rgb_array})`);
             };
-            output_array.push("rgba(0, 0, 0, 0)");
+            output_array.push("rgba(0, 0, 0, 0)"); //  add the transparent bottom half
             return(output_array);
         };
 
@@ -173,28 +173,6 @@ function create_gauge(id) {
         let subject_metadata = metadata.filter(find_id)[0];
         console.log(subject_metadata);
 
-     //    var gauge_data = [{
-    	// 	// domain: { x: [0, max_wfreq], y: [0, max_wfreq] },
-    	// 	value: subject_metadata.wfreq,
-    	// 	title: {
-     //            text: "<b>Belly Button Washing Frequency</b><br>Scrubs per Week"
-     //        },
-    	// 	type: "indicator",
-    	// 	mode: "gauge+number",
-     //        gauge: {
-     //            // shape: "angular",
-     //            axis: {
-     //                range: [0, max_wfreq],
-     //                tickmode: "linear",
-     //                showticklabels: false,
-     //                tickcolor: "transparent"
-     //            },
-     //            steps: steps_array,
-     //            bordercolor: "transparent",
-     //            bar: {color: "transparent"}
-     //            }
-     //        // marker: {text: ["0-1", "1-2", "2-3", "3-4", "4-5", "5-6", "6-7", "7-8", "8-9"]}
-    	// }];
 
         let gauge_data = [{
             type: "pie",
@@ -205,7 +183,7 @@ function create_gauge(id) {
             textposition: "inside",
             marker: {colors: gradientArray},
             labels: ["0-1", "1-2", "2-3", "3-4", "4-5", "5-6", "6-7", "7-8", "8-9", ""],
-            hole: 0.4,
+            hole: 0.5,
             rotation: 90,
             showlegend: false
         }];
@@ -226,15 +204,15 @@ function create_gauge(id) {
                 const sector_angle = 360/(2*(max_wfreq+1)) * Math.PI/180; // Angle in radians
                 let sector = i + 1; // Since don't want to multiply by 0
                 console.log(sector_angle*(sector));
-
+        
                 let x_val = centre_xcoord + Math.cos(sector_angle*sector) * gauge_radius;
                 let y_val = centre_ycoord + Math.sin(sector_angle*sector) * (1 - arrow_length*2);
                 
                 x_coords.push(Math.round(x_val*100)/100);
                 y_coords.push(Math.round(y_val*100)/100);
-
+        
                 console.log(`${max_wfreq-i-1}-${max_wfreq-i}`);
-
+        
                 let label_obj = {
                     x: Math.round(x_val*100)/100,
                     y: Math.round(y_val*100)/100,
@@ -244,7 +222,7 @@ function create_gauge(id) {
                     arrowcolor: "transparent"
                 };
                 output_list.push(label_obj);
-    
+        
                 console.log("x-coords", x_coords);
                 console.log("y-coords", y_coords);
             };
@@ -255,17 +233,41 @@ function create_gauge(id) {
                 return([x_val, y_val]);
             };
         };
-        let annotation_list = label_coords("labels");
-        
-        // var gauge_layout = {
-        //     annotations: annotation_list,
-        //     shapes: {
-        //         type: "path"
-        //     }
-        // };
 
+        function needle_path(gauge_value) {
+            const needle_length = 0.8;
+            console.log(gauge_value);
+
+            const sector_angle = 360 / (2 * (max_wfreq + 1)) * (Math.PI / 180); // angle in radians
+            let needle_angle = sector_angle * gauge_value;
+
+            let x_val = needle_length * Math.cos(needle_angle);
+            let y_val = needle_length * Math.sin(needle_angle);
+
+            return([x_val, y_val]);
+
+            // for (let i=0; i<max_wfreq; i++) {
+            //     const sector_angle = 360 / (2 * (max_wfreq + 1)) * (Math.PI / 180); // angle in radians
+            //     const sector_centre = sector_angle / 2;
+            //     let sector = i + 1;
+            //     console.log(sector_centre * sector);
+
+            //     let x_val = needle_length * Math.cos(sector_centre * sector);
+            //     let y_val = needle_length * Math.sin(sector_centre * sector);
+            // };
+        };
+        let needle_coords = needle_path(subject_metadata.wfreq);
+        console.log("NEEDLE COORDS", needle_coords);
+        
         let gauge_layout = {
-            title: {text: "<b>Belly Button Washing Frequency</b><br>Scrubs per Week"}
+            title: {text: "<b>Belly Button Washing Frequency</b><br>Scrubs per Week"},
+            shapes: [{
+                type: "path",
+                // path: `M 0.5 0.5 L 0.5 0.8`,
+                path: `M 0.5 0.5 L ${needle_coords[0]} ${needle_coords[1]}`,
+                fillcolor: "black",
+                line: {color: "black"}
+            }]
         };
         
         Plotly.newPlot("gauge", gauge_data, gauge_layout);
