@@ -245,7 +245,6 @@ function create_gauge(id) {
 
         function needle_path(gauge_value) {
             const needle_length = 0.15;
-            gauge_value = 5;
 
             let one_sector = 360 / (2 * max_wfreq); // in degrees
             console.log(`one_sector: ${one_sector}`);
@@ -269,9 +268,6 @@ function create_gauge(id) {
             return([x_val, y_val]);
         };
 
-        // for (let i=0; i<max_wfreq; i++) {
-        //     console.log(needle_path(i));
-        // };
         
         let needle_coords = needle_path(subject_metadata.wfreq);
 
@@ -293,42 +289,21 @@ function create_gauge(id) {
         let gauge_layout = {
             title: {text: "<b>Belly Button Washing Frequency</b><br>Scrubs per Week"},
             shapes: [
-                // {
-            //     type: "path",
-            //     // path: `M 0.5 0.5 l 0.1 0.2`,
-            //     path: `M 0 0 L 0.5 0.5`,
-            //     fillcolor: "black",
-            //     line: {color: "black"}
-            // },
-            // {
-            //     type: "path",
-            //     path: `M 0.5 0.5 L 0.35 0.5`,
-            //     fillcolor: "red",
-            //     line: {color: "red"}
-            // },
-            // {
-            //     type: "path",
-            //     path: `M 0.5 0.5 L 0.43 0.76`,
-            //     fillcolor: "green",
-            //     line: {color: "green"}
-            // },
-            // {
-            //     type: "path",
-            //     path: `M 0.5 0.5 L 0.5 0.8`,
-            //     fillcolor: "purple",
-            //     line: {color: "purple"}
-            // },
-            // {
-            //     type: "path",
-            //     path: `M 0.5 0.5 L 0.36 0.6`,
-            //     fillcolor: "yellow",
-            //     line: {color: "yellow"}
-            // },
             {
                 type: "path",
                 path: `M 0.5 0.5 L ${needle_coords[0]} ${needle_coords[1]}`,
-                fillcolor: "blue",
+                fillcolor: "maroon",
                 line: {color: "blue"}
+            // },
+            // {
+            //     type: "circle",
+            //     xref: 0.5,
+            //     yref: 0.5,
+            //     fillcolor: "blue",
+            //     x0: 0.48,
+            //     y0: 0.48,
+            //     x1: 0.52,
+            //     y1: 0.51
             }]
         };
         
