@@ -197,52 +197,6 @@ function create_gauge(id) {
             };
         };
 
-        function label_coords(mode) {
-            // Constants to account for positioning on the gauge
-            const arrow_length = 0.025;
-            const gauge_radius = 0.45 - arrow_length;
-            const centre_xcoord = 0.5 + arrow_length;
-            const centre_ycoord = -0.2;
-            
-            // Get the x and y coordinates for the annotation
-            let x_coords = []
-            let y_coords = []
-            let output_list = []
-            
-            for (let i=0; i<max_wfreq; i++) {
-                const sector_angle = 360/(2*(max_wfreq+1)) * Math.PI/180; // Angle in radians
-                let sector = i + 1; // Since don't want to multiply by 0
-                console.log(sector_angle*(sector));
-        
-                let x_val = centre_xcoord + Math.cos(sector_angle*sector) * gauge_radius;
-                let y_val = centre_ycoord + Math.sin(sector_angle*sector) * (1 - arrow_length*2);
-                
-                x_coords.push(Math.round(x_val*100)/100);
-                y_coords.push(Math.round(y_val*100)/100);
-        
-                console.log(`${max_wfreq-i-1}-${max_wfreq-i}`);
-        
-                let label_obj = {
-                    x: Math.round(x_val*100)/100,
-                    y: Math.round(y_val*100)/100,
-                    // text: `${i}-${i+1}`,
-                    text: `${max_wfreq-i-1}-${max_wfreq-i}`,
-                    showarrow: true,
-                    arrowcolor: "transparent"
-                };
-                output_list.push(label_obj);
-        
-                console.log("x-coords", x_coords);
-                console.log("y-coords", y_coords);
-            };
-            if (mode === "labels") {
-                return(output_list);
-            }
-            else if (mode === "needle") {
-                return([x_val, y_val]);
-            };
-        };
-
         function needle_path(gauge_value) {
             const needle_length = 0.15;
 
@@ -267,7 +221,6 @@ function create_gauge(id) {
 
             return([x_val, y_val]);
         };
-
         
         let needle_coords = needle_path(subject_metadata.wfreq);
 
