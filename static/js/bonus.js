@@ -1,3 +1,12 @@
+// Define the constants
+// const start_colour = [245, 245, 220]; // beige
+// const end_colour = [143, 188, 143]; // dark sea green
+const start_colour = [245, 240, 232];
+const end_colour = [128, 170, 124];
+const gauge_centre = 0.5; // value for both x- and y-coordinates
+const needle_length = 0.15;
+
+
 //-------- HELPER FUNCTION: GRADIENT ARRAY --------//
 // Create a function that will create a gradient array given rgb values
 function gradient(start_rgb, end_rgb, steps) {
@@ -23,17 +32,10 @@ function gradient(start_rgb, end_rgb, steps) {
     return(output_array);
 };
 
+
 //-------- FUNCTION TO CREATE THE GAUGE --------//
 function create_gauge(id) {
     d3.json(samples_url).then(function(data) {
-
-        // Define the constants
-        // const start_colour = [245, 245, 220]; // beige
-        // const end_colour = [143, 188, 143]; // dark sea green
-        const start_colour = [245, 240, 232];
-        const end_colour = [128, 170, 124];
-        const gauge_centre = 0.5; // value for both x- and y-coordinates
-        const needle_length = 0.15;
         
         // Import relevant JSON array
         var metadata = Object.values(data.metadata);
