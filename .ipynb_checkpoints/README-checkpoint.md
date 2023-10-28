@@ -12,7 +12,7 @@ Dashboard deployed at: [https://alyssahondrade.github.io/belly-button-challenge/
     3. [Dataset](https://github.com/alyssahondrade/belly-button-challenge/tree/main#dataset)
 2. [Approach](https://github.com/alyssahondrade/belly-button-challenge/tree/main#approach)
     1. [Structure](https://github.com/alyssahondrade/belly-button-challenge/tree/main#structure)
-    2. [plots.js Script](https://github.com/alyssahondrade/belly-button-challenge/tree/main#functions)
+    2. [plots.js Script](https://github.com/alyssahondrade/belly-button-challenge/tree/main#plots-script)
     3. [bonus.js Script](https://github.com/alyssahondrade/belly-button-challenge#bonus-section)
 3. [References](https://github.com/alyssahondrade/belly-button-challenge/tree/main#references)
 
@@ -38,7 +38,7 @@ Dashboard deployed at: [https://alyssahondrade.github.io/belly-button-challenge/
 1. `gradient()` - creates an array of RGB values given a start colour, end colour, and the number of steps.
 2. `create_gauge()` - creates the gauge chart to plot the weekly washing frequency of the individual.
 
-### Plots Script
+### `plots.js` Script
 1. `create_plots()` function
     - Parse the values generically. This way the parsed results can be used for both bar chart and the bubble plot, adhering to DRY principles.
     - Create the bar chart:
@@ -55,7 +55,7 @@ Dashboard deployed at: [https://alyssahondrade.github.io/belly-button-challenge/
 
 3. 
 
-### Bonus Script
+### `bonus.js` Script
 
 
 ## References
