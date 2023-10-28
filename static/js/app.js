@@ -50,7 +50,8 @@ function create_plots(subject_id) {
         }];
     
         let bar_layout = {
-            title: `Subject "${names[subject_idx]}" Top 10 Samples`, // NOT ALWAYS TOP 10
+            // title: `Subject "${names[subject_idx]}" Top 10 Samples`, // NOT ALWAYS TOP 10
+            title: "Top Samples",
             xaxis: {
                 title: {text: "Number of Samples"}
             },
@@ -77,7 +78,8 @@ function create_plots(subject_id) {
         }];
 
         let bubble_layout = {
-            title: `Subject "${names[subject_idx]}" Biodiversity`,
+            // title: `Subject "${names[subject_idx]}" Biodiversity Distribution`,
+            title: "Biodiversity Distribution",
             xaxis: {
                 title: "OTU IDs"
             },
