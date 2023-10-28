@@ -103,11 +103,9 @@ function subject_metadata(id) {
         
         // Use filter to find the correct subject id
         function find_id(subject) {
-            // console.log(typeof(id), id, typeof(subject.id), subject.id);
             return(subject.id === parseInt(id));
         };
         
-        // let subject_id = metadata.filter((subject) => subject.id === id);
         let subject_metadata = metadata.filter(find_id)[0];
 
         // Clear the metadata info box

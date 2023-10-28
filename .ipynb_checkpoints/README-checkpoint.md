@@ -39,21 +39,33 @@ Dashboard deployed at: [https://alyssahondrade.github.io/belly-button-challenge/
 2. `create_gauge()` - creates the gauge chart to plot the weekly washing frequency of the individual.
 
 ### `plots.js` Script
-1. `create_plots()` function
-    - Parse the values generically. This way the parsed results can be used for both bar chart and the bubble plot, adhering to DRY principles.
+1. `create_plots()`
+    - Parse the values generically. This way the parsed results can be used for both the bar chart and the bubble plot, adhering to DRY principles.
     - Create the bar chart:
         - For the `x`, `y`, and `text` values, use `slice(0, 10).reverse()` to get the top 10 samples in the correct order.
         - To get a horizontal chart, use `type: "bar"` and `orientation: "h"`.
         - To have only the `otu_labels` as hovertext, use `hoverinfo: "text"`.
         - Use `Plotly.newPlot()` instead of `Plotly.plot()`, otherwise, this will add a new trace every time a new subject ID is chosen.
     - Create the bubble chart:
-        - Use the generically parsed values for `x`, `y` and `marker` values as per the instructions.
+        - Use the generically parsed values for `x`, `y` and `marker` values.
         - To match the given example, use `colorscale: "Earth"` as a marker attribute.
 
-2. `subject_metadata()` function
-    - 
+2. `subject_metadata()`
+    - Create a filter function to find the correct subject ID.
+    - Get the subject metadata using the filter function.
+    - Select the `#sample-metadata` object which refers to the "demographic info" box.
+    - Use `remove()` with `selectAll()` to clear the box.
+    - Using a for-loop, append the metadata key-value pair as a paragraph object.
 
-3. 
+3. `optionChanged()`
+    - This function is predefined as per the `selDataset`'s `onchange` attribute in the html file.
+    - The function calls the `create_plots()` and `subject_metadata()` function to update the plots when a new subject ID is chosen in the dropdown.
+    - The `create_gauge()` function is also called from `bonus.js` to create the indicator.
+
+4. `init()`
+    - The dropdown menu is populated with options using a for-loop.
+    - The funcions as per `optionChanged()` are called for the first subject ID to initialise the webpage.
+    - This function is called at the end of the script to create the initial plots.
 
 ### `bonus.js` Script
 
