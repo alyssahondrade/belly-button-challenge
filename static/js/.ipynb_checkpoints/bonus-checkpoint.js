@@ -6,6 +6,24 @@ const end_colour = [128, 170, 124];
 const gauge_centre = 0.5; // value for both x- and y-coordinates
 const needle_length = 0.15;
 
+//-------- FUNCTION TO GET THE MAXIMUM WASH FREQUENCY --------//
+function get_max_wfreq() {
+    d3.json(samples_url).then(function(data) {
+        // Import relevant JSON array
+        var metadata = Object.values(data.metadata);
+
+        // Convert the wfreq value to an integer
+        let wfreq_list = metadata.map((subject) => parseInt(subject.wfreq));
+
+        // Use a filter to only pass non-null values
+        let wfreq_nums = wfreq_list.filter(element => element);
+
+        // Use the spread operator to expand the iterable
+        let max_wfreq = Math.max(...wfreq_nums);
+
+        return(max_wfreq);
+    });
+};
 
 //-------- HELPER FUNCTION: GRADIENT ARRAY --------//
 // Create a function that will create a gradient array given rgb values
