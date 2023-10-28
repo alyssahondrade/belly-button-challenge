@@ -27,7 +27,7 @@ function gradient(start_rgb, end_rgb, steps) {
     // Add the transparent bottom half
     output_array.push("rgba(0, 0, 0, 0)");
 
-    return(output_array);
+    return output_array;
 };
 
 
@@ -65,10 +65,10 @@ function create_gauge(id) {
             gauge_labels.push("");
 
             if (mode === "values") {
-                return(gauge_values);
+                return gauge_values;
             }
             else if (mode === "labels") {
-                return(gauge_labels);
+                return gauge_labels;
             };
         };
 
@@ -115,7 +115,7 @@ function create_gauge(id) {
                     y = gauge_centre;
             };
 
-            return([x, y, lx, ly, rx, ry]);
+            return [x, y, lx, ly, rx, ry];
         };
 
         // Use filter to find the correct subject id

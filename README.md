@@ -31,12 +31,12 @@ Dashboard deployed at: [https://alyssahondrade.github.io/belly-button-challenge/
 [`plots.js`](https://github.com/alyssahondrade/belly-button-challenge/blob/main/static/js/plots.js) is structured as follows:
 1. `create_plots()` - creates the bar chart and bubble plot per subject ID.
 2. `subject_metadata()` - creates the "demographic info" box, populated with the metadata.
-3. `optionChanged()`
-4. `init()`
+3. `optionChanged()` - allows the plots to be updated as the subject ID is changed.
+4. `init()` - populates the dropdown options and creates the initial plots.
 
 [`bonus.js`]() is structured as follows:
 1. `gradient()` - creates an array of RGB values given a start colour, end colour, and the number of steps.
-2. `create_gauge()`
+2. `create_gauge()` - creates the gauge chart to plot the weekly washing frequency of the individual.
 
 ### Functions
 
