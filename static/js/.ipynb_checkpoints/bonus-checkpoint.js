@@ -3,8 +3,10 @@ function create_gauge(id) {
     d3.json(samples_url).then(function(data) {
 
         // Define the constants
-        const start_colour = [245, 245, 220]; // beige
-        const end_colour = [143, 188, 143]; // dark sea green
+        // const start_colour = [245, 245, 220]; // beige
+        // const end_colour = [143, 188, 143]; // dark sea green
+        const start_colour = [245, 240, 232];
+        const end_colour = [128, 170, 124];
         const gauge_centre = 0.5; // value for both x- and y-coordinates
         const needle_length = 0.15;
         
