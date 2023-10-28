@@ -204,7 +204,7 @@ function create_gauge(id) {
         const gauge_centre = 0.5;
 
         function needle_path(gauge_value) {
-            gauge_value = 9;
+            // gauge_value = 0;
             // Define the needle length as a constant
             const needle_length = 0.15;
 
@@ -227,26 +227,12 @@ function create_gauge(id) {
             let x = Math.round(x_val*100)/100;
             let y = Math.round(y_val*100)/100;
 
-            let lx = 0;
-            let ly = 0;
-            let rx = 0;
-            let ry = 0;
-
-            // let lx = 0.5;
-            // let ly = 0.49;
-            // let rx = 0.5;
-            // let ry = 0.51;
+            let lx = 0.495;
+            let ly = gauge_centre;
+            let rx = 0.505;
+            let ry = gauge_centre;
             
-            // Calculate the needle base left and right
-            // if (gauge_value === 0 | gauge_value === 9) {
-                // lx = 0.50;
-                // ly = 0.48;
-                // rx = 0.50;
-                // ry = 0.52;
-            // }
-            // else if (gauge_value === 1) {
-            //     lx = 0.
-            // }
+            // Calculate the needle base coordinates
             switch (gauge_value) {
                 case 0:
                 case 1:
@@ -257,17 +243,9 @@ function create_gauge(id) {
                     rx = 0.50;
                     ry = 0.51;
                     break;
-                case 2:
-                case 3:
-                case 4:
-                case 5:
-                case 6:
-                case 7:
-                    lx = 0.495;
-                    ly = 0.50;
-                    rx = 0.505;
-                    ry = 0.50;
-                    break;
+                case null: // Needle disappears if the values is "null"
+                    x = gauge_centre;
+                    y = gauge_centre;
             };
 
             return([x, y, lx, ly, rx, ry]);
