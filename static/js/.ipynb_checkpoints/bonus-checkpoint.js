@@ -1,10 +1,9 @@
 // Define the constants
-// const start_colour = [245, 245, 220]; // beige
-// const end_colour = [143, 188, 143]; // dark sea green
 const start_colour = [245, 240, 232];
 const end_colour = [128, 170, 124];
 const gauge_centre = 0.5; // value for both x- and y-coordinates
 const needle_length = 0.15;
+
 
 //-------- HELPER FUNCTION: GRADIENT ARRAY --------//
 // Create a function that will create a gradient array given rgb values
@@ -49,7 +48,7 @@ function create_gauge(id) {
         let max_wfreq = Math.max(...wfreq_nums);
 
         // Generate the gradient array (beige -> dark sea green)
-        const gradientArray = gradient(start_colour, end_colour, max_wfreq);
+        let gradientArray = gradient(start_colour, end_colour, max_wfreq);
 
         // Create a function that will return the values OR labels for the gauge
         function gauge_setup(mode) {
@@ -123,6 +122,8 @@ function create_gauge(id) {
         function find_id(subject) {
             return(subject.id === parseInt(id));
         };
+
+        // Use the needle_path() function to get the coordinates array
         let subject_metadata = metadata.filter(find_id)[0];
         let needle_coords = needle_path(subject_metadata.wfreq);
 
