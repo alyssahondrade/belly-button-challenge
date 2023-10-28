@@ -6,9 +6,15 @@ Github repository at: [https://github.com/alyssahondrade/belly-button-challenge.
 Dashboard deployed at: [https://alyssahondrade.github.io/belly-button-challenge/](https://alyssahondrade.github.io/belly-button-challenge/)
 
 ## Table of Contents
-1. [Introduction]()
-2. [Approach]()
-3. [References]()
+1. [Introduction](https://github.com/alyssahondrade/belly-button-challenge/tree/main#introduction)
+    1. [Goal](https://github.com/alyssahondrade/belly-button-challenge/tree/main#goal)
+    2. [Repository Structure](https://github.com/alyssahondrade/belly-button-challenge/tree/main#repository-structure)
+    3. [Dataset](https://github.com/alyssahondrade/belly-button-challenge/tree/main#dataset)
+2. [Approach](https://github.com/alyssahondrade/belly-button-challenge/tree/main#approach)
+    1. [Structure](https://github.com/alyssahondrade/belly-button-challenge/tree/main#structure)
+    2. [Functions](https://github.com/alyssahondrade/belly-button-challenge/tree/main#functions)
+    3. [Bonus Section]
+3. [References](https://github.com/alyssahondrade/belly-button-challenge/tree/main#references)
 
 ## Introduction
 ### Goal
@@ -29,6 +35,9 @@ Dashboard deployed at: [https://alyssahondrade.github.io/belly-button-challenge/
 5. `init()`
 
 ### Functions
+
+
+### Bonus Section
 
 
 ## References
