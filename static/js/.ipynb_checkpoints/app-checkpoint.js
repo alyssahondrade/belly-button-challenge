@@ -4,6 +4,7 @@ const samples_url = "https://2u-data-curriculum-team.s3.amazonaws.com/dataviz-cl
 //-------- FUNCTION TO CREATE THE PLOTS PER ID --------//
 function create_plots(subject_id) {
     d3.json(samples_url).then(function(data) {
+        
         // Import relevant JSON array
         var names = Object.values(data.names);
         var samples = Object.values(data.samples);
@@ -34,7 +35,6 @@ function create_plots(subject_id) {
 
         // Get the index of the subject_id
         let subject_idx = names.indexOf(subject_id);
-        // console.log(subject_idx);
 
         //-------- CREATE THE BAR CHART --------//
         let x = [];
@@ -46,11 +46,11 @@ function create_plots(subject_id) {
             y: edited_otuids[subject_idx].slice(0, 10).reverse(),
             type: "bar",
             orientation: "h",
-            name: sample_labels[subject_idx].slice(0, 10)
+            text: sample_labels[subject_idx].slice(0, 10).reverse(),
+            hoverinfo: "text" // otu_labels as the hovertext
         }];
     
         let bar_layout = {
-            // title: `Subject "${names[subject_idx]}" Top 10 Samples`, // NOT ALWAYS TOP 10
             title: "Top Samples",
             xaxis: {
                 title: {text: "Number of Samples"}
@@ -74,15 +74,13 @@ function create_plots(subject_id) {
                 size: sample_values[subject_idx],
                 color: sample_otuids[subject_idx]
             },
-            text: sample_labels[subject_idx]
+            text: sample_labels[subject_idx],
+            hoverinfo: "text"
         }];
 
         let bubble_layout = {
-            // title: `Subject "${names[subject_idx]}" Biodiversity Distribution`,
             title: "Biodiversity Distribution",
-            xaxis: {
-                title: "OTU IDs"
-            },
+            xaxis: {title: "OTU IDs"},
             yaxis: {
                 title: {text: "Number of Samples"},
                 automargin: true
@@ -100,9 +98,6 @@ function subject_metadata(id) {
         // Import relevant JSON array
         var metadata = Object.values(data.metadata);
         
-        // let metadata_box = d3.select("#sample-metadata").text(id);
-
-
         // Use filter to find the correct subject id
         function find_id(subject) {
             // console.log(typeof(id), id, typeof(subject.id), subject.id);
@@ -111,7 +106,6 @@ function subject_metadata(id) {
         
         // let subject_id = metadata.filter((subject) => subject.id === id);
         let subject_metadata = metadata.filter(find_id)[0];
-        // console.log(subject_metadata);
 
         // Clear the metadata info box
         let metadata_box = d3.select("#sample-metadata");
@@ -122,6 +116,29 @@ function subject_metadata(id) {
             metadata_box.append("p").text(`${key}: ${subject_metadata[key]}`);
         };
     });
+};
+
+//-------- HELPER FUNCTION: GRADIENT ARRAY --------//
+// Create a function that will create a gradient array given rgb values
+function gradient(start_rgb, end_rgb, steps) {
+    let output_array = [];
+    
+    for (let i=0; i<steps; i++) {
+        let rgb_array = []
+
+        // Get the rgb values in array form
+        for (let j=0; j<start_rgb.length; j++) {
+            rgb_array.push(Math.round(start_rgb[j] + i*(end_rgb[j] - start_rgb[j])/steps));
+        };
+
+        // Convert the rgb array to this format: `rgb(r-val, g-val, b-val)`
+        output_array.push(`rgb(${rgb_array})`);
+    };
+
+    // Add the transparent bottom half
+    output_array.push("rgba(0, 0, 0, 0)");
+
+    return(output_array);
 };
 
 //-------- FUNCTION TO CREATE THE GAUGE --------//
@@ -137,47 +154,10 @@ function create_gauge(id) {
         let wfreq_nums = wfreq_list.filter(element => element); // only pass non-null
         let max_wfreq = Math.max(...wfreq_nums); // spread operator to expand iterable
 
-        // Create a function that will create a gradient array given rgb values
-        function gradient(start_rgb, end_rgb, steps) {
-            let output_array = [];
-            
-            for (let i=0; i<steps; i++) {
-                let rgb_array = []
-
-                // Get the rgb values in array form
-                for (let j=0; j<start_rgb.length; j++) {
-                    rgb_array.push(Math.round(start_rgb[j] + i*(end_rgb[j] - start_rgb[j])/steps));
-                };
-
-                // Convert the rgb array to this format: `rgb(r-val, g-val, b-val)`
-                output_array.push(`rgb(${rgb_array})`);
-            };
-
-            // Add the transparent bottom half
-            output_array.push("rgba(0, 0, 0, 0)");
-
-            return(output_array);
-        };
-
         // Generate the gradient array (beige -> dark sea green)
         const start_colour = [245,245,220]; // beige
         const end_colour = [143,188,143]; // dark sea green
         const gradientArray = gradient(start_colour, end_colour, max_wfreq);
-
-        // Create the steps array
-        let steps_array = []
-        for (let i=0; i<max_wfreq; i++) {
-            let new_range = {range: [i, i+1], color: gradientArray[i]};
-            steps_array.push(new_range);
-        };
-        
-        // Use filter to find the correct subject id
-        function find_id(subject) {
-            return(subject.id === parseInt(id));
-        };
-
-        let subject_metadata = metadata.filter(find_id)[0];
-        console.log(subject_metadata);
 
         function gauge_setup(mode) {
             let gauge_values = []
@@ -229,9 +209,9 @@ function create_gauge(id) {
             let x = Math.round(x_val*100)/100;
             let y = Math.round(y_val*100)/100;
 
-            let lx = 0.495;
+            let lx = gauge_centre - 0.005; // 0.495
             let ly = gauge_centre;
-            let rx = 0.505;
+            let rx = gauge_centre + 0.005; // 0.505
             let ry = gauge_centre;
             
             // Calculate the needle base coordinates
@@ -240,10 +220,10 @@ function create_gauge(id) {
                 case 1:
                 case 8:
                 case 9:
-                    lx = 0.50;
-                    ly = 0.49;
-                    rx = 0.50;
-                    ry = 0.51;
+                    lx = gauge_centre;
+                    ly = gauge_centre - 0.01; // 0.49
+                    rx = gauge_centre;
+                    ry = gauge_centre + 0.01; // 0.51
                     break;
                 case null: // Needle disappears if the values is "null"
                     x = gauge_centre;
@@ -252,39 +232,45 @@ function create_gauge(id) {
 
             return([x, y, lx, ly, rx, ry]);
         };
-        
+
+        // Use filter to find the correct subject id
+        function find_id(subject) {
+            return(subject.id === parseInt(id));
+        };
+        let subject_metadata = metadata.filter(find_id)[0];
         let needle_coords = needle_path(subject_metadata.wfreq);
 
-        let gauge_data = [
-            {
-                type: "pie",
-                values: gauge_setup("values"),
-                text: gauge_setup("labels"),
-                direction: "clockwise",
-                textinfo: "text",
-                textposition: "inside",
-                marker: {colors: gradientArray},
-                labels: gauge_setup("labels"),
-                hole: 0.5,
-                rotation: 90,
-                showlegend: false
-            }
-        ];
+        let gauge_data = [{
+            type: "pie",
+            values: gauge_setup("values"),
+            text: gauge_setup("labels"),
+            direction: "clockwise",
+            textinfo: "text",
+            textposition: "inside",
+            marker: {colors: gradientArray},
+            hole: 0.5,
+            rotation: 90,
+            showlegend: false,
+            hoverinfo: "skip"
+            }];
         
         let gauge_layout = {
             title: {text: "<b>Belly Button Washing Frequency</b><br>Scrubs per Week"},
             width: 720,
             height: 450,
-            // autosize: true,
-            shapes: [
-            {
-                type: "path",
-                path: `M ${gauge_centre} ${gauge_centre} L ${needle_coords[0]} ${needle_coords[1]} L ${needle_coords[2]} ${needle_coords[3]} L ${needle_coords[4]} ${needle_coords[5]} L ${needle_coords[0]} ${needle_coords[1]} Z`,
+            shapes: [{
+                type: "path", // needle triangle
+                path: `
+                    M ${gauge_centre} ${gauge_centre}\
+                    L ${needle_coords[0]} ${needle_coords[1]}\
+                    L ${needle_coords[2]} ${needle_coords[3]}\
+                    L ${needle_coords[4]} ${needle_coords[5]}\
+                    L ${needle_coords[0]} ${needle_coords[1]}\
+                    Z`,
                 fillcolor: "maroon",
                 line: {color: "maroon"}
-            },
-            {
-                type: "circle",
+            }, {
+                type: "circle", // needle base
                 xref: gauge_centre,
                 yref: gauge_centre,
                 fillcolor: "maroon",
@@ -306,9 +292,6 @@ function optionChanged(id) {
     subject_metadata(id);
     create_gauge(id);
 };
-
-
-
 
 //-------- FUNCTION TO CREATE WEBPAGE --------//
 function init() {
@@ -334,4 +317,5 @@ function init() {
     });
 };
 
+// Call the init() function
 init();
