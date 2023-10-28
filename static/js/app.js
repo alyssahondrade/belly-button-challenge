@@ -138,6 +138,7 @@ function create_gauge(id) {
         // Create a function that will create a gradient array given rgb values
         function gradient(start_rgb, end_rgb, steps) {
             let output_array = [];
+            
             for (let i=0; i<steps; i++) {
                 let rgb_array = []
 
@@ -149,14 +150,17 @@ function create_gauge(id) {
                 // Convert the rgb array to this format: `rgb(r-val, g-val, b-val)`
                 output_array.push(`rgb(${rgb_array})`);
             };
-            output_array.push("rgba(0, 0, 0, 0)"); //  add the transparent bottom half
+
+            // Add the transparent bottom half
+            output_array.push("rgba(0, 0, 0, 0)");
+
             return(output_array);
         };
 
-        // Generate the gradient array
-        const start_colour = [245,245,220] // beige
-        const end_colour = [143,188,143] // dark sea green
-        const gradientArray = gradient(start_colour, end_colour, max_wfreq) // beige -> darkseagreen
+        // Generate the gradient array (beige -> dark sea green)
+        const start_colour = [245,245,220]; // beige
+        const end_colour = [143,188,143]; // dark sea green
+        const gradientArray = gradient(start_colour, end_colour, max_wfreq);
 
         // Create the steps array
         let steps_array = []
@@ -197,29 +201,76 @@ function create_gauge(id) {
             };
         };
 
+        const gauge_centre = 0.5;
+
         function needle_path(gauge_value) {
+            gauge_value = 9;
+            // Define the needle length as a constant
             const needle_length = 0.15;
 
-            let one_sector = 360 / (2 * max_wfreq); // in degrees
-            console.log(`one_sector: ${one_sector}`);
-            
-            let sector_degrees = gauge_value * one_sector;
-            console.log(`sector_degrees: ${sector_degrees}`);
-            
-            let needle_angle = sector_degrees * Math.PI / 180; // in radians
-            console.log(`needle_angle: ${needle_angle}`);
-            
-            let x_val = 0.5 - needle_length * Math.cos(needle_angle);
-            let y_val = 0.5 + 2 * needle_length * Math.sin(needle_angle); // to account for "transparent" half
-            console.log(`x_val: ${x_val}`);
-            console.log(`y_val: ${y_val}`);
+            // Calculate the angle of one sector (in degrees)
+            let one_sector = 360 / (2 * max_wfreq);
 
+            // Calculate the total angle given the gauge_value
+            let sector_degrees = gauge_value * one_sector;
+
+            // Convert the total angle to radians
+            let needle_angle = sector_degrees * Math.PI / 180;
+
+            // Get the x-value, accounting for angles from 0-180 degrees
+            let x_val = gauge_centre - needle_length * Math.cos(needle_angle);
+
+            // Get the y-value, accounting for the "transparent" pie half    
+            let y_val = gauge_centre + 2 * needle_length * Math.sin(needle_angle);
+
+            // Round the values to 2 decimal points
             let x = Math.round(x_val*100)/100;
             let y = Math.round(y_val*100)/100;
 
-            console.log(x_val, y_val);
+            let lx = 0;
+            let ly = 0;
+            let rx = 0;
+            let ry = 0;
 
-            return([x_val, y_val]);
+            // let lx = 0.5;
+            // let ly = 0.49;
+            // let rx = 0.5;
+            // let ry = 0.51;
+            
+            // Calculate the needle base left and right
+            // if (gauge_value === 0 | gauge_value === 9) {
+                // lx = 0.50;
+                // ly = 0.48;
+                // rx = 0.50;
+                // ry = 0.52;
+            // }
+            // else if (gauge_value === 1) {
+            //     lx = 0.
+            // }
+            switch (gauge_value) {
+                case 0:
+                case 1:
+                case 8:
+                case 9:
+                    lx = 0.50;
+                    ly = 0.49;
+                    rx = 0.50;
+                    ry = 0.51;
+                    break;
+                case 2:
+                case 3:
+                case 4:
+                case 5:
+                case 6:
+                case 7:
+                    lx = 0.495;
+                    ly = 0.50;
+                    rx = 0.505;
+                    ry = 0.50;
+                    break;
+            };
+
+            return([x, y, lx, ly, rx, ry]);
         };
         
         let needle_coords = needle_path(subject_metadata.wfreq);
@@ -237,27 +288,31 @@ function create_gauge(id) {
                 hole: 0.5,
                 rotation: 90,
                 showlegend: false
-            }];
+            }
+        ];
         
         let gauge_layout = {
             title: {text: "<b>Belly Button Washing Frequency</b><br>Scrubs per Week"},
+            width: 720,
+            height: 450,
+            // autosize: true,
             shapes: [
             {
                 type: "path",
-                path: `M 0.49 0.5 L ${needle_coords[0]} ${needle_coords[1]} L 0.51 0.51`,
+                path: `M ${gauge_centre} ${gauge_centre} L ${needle_coords[0]} ${needle_coords[1]} L ${needle_coords[2]} ${needle_coords[3]} L ${needle_coords[4]} ${needle_coords[5]} L ${needle_coords[0]} ${needle_coords[1]} Z`,
                 fillcolor: "maroon",
                 line: {color: "maroon"}
             },
             {
                 type: "circle",
-                xref: 0.5,
-                yref: 0.5,
+                xref: gauge_centre,
+                yref: gauge_centre,
                 fillcolor: "maroon",
                 line: {color: "maroon"},
-                x0: 0.49,
-                y0: 0.48,
-                x1: 0.51,
-                y1: 0.52
+                x0: gauge_centre-0.01, // 0.49
+                y0: gauge_centre-0.02, // 0.48
+                x1: gauge_centre+0.01, // 0.51
+                y1: gauge_centre+0.02  // 0.52
             }]
         };
         
