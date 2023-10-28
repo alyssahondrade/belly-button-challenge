@@ -82,8 +82,10 @@ function create_plots(subject_id) {
             title: "Biodiversity Distribution",
             xaxis: {title: "OTU IDs"},
             yaxis: {
-                title: {text: "Number of Samples"},
-                automargin: true
+                title: {text: "Number of Samples", standoff: 10},
+                automargin: true,
+                tickcolor: "white",
+                ticklen: 10
             }
         };
         
@@ -121,12 +123,14 @@ function subject_metadata(id) {
 //-------- HELPER FUNCTION: GRADIENT ARRAY --------//
 // Create a function that will create a gradient array given rgb values
 function gradient(start_rgb, end_rgb, steps) {
+
+    // Initialise array that will hold the final array
     let output_array = [];
-    
+
+    // Get the rgb values in array form
     for (let i=0; i<steps; i++) {
         let rgb_array = []
-
-        // Get the rgb values in array form
+        
         for (let j=0; j<start_rgb.length; j++) {
             rgb_array.push(Math.round(start_rgb[j] + i*(end_rgb[j] - start_rgb[j])/steps));
         };
@@ -143,8 +147,13 @@ function gradient(start_rgb, end_rgb, steps) {
 
 //-------- FUNCTION TO CREATE THE GAUGE --------//
 function create_gauge(id) {
-    // Populate the dropdown with options
     d3.json(samples_url).then(function(data) {
+
+        // Define the constants
+        const start_colour = [245, 245, 220]; // beige
+        const end_colour = [143, 188, 143]; // dark sea green
+        const gauge_centre = 0.5; // value for both x- and y-coordinates
+        const needle_length = 0.15;
         
         // Import relevant JSON array
         var metadata = Object.values(data.metadata);
@@ -155,20 +164,16 @@ function create_gauge(id) {
         let max_wfreq = Math.max(...wfreq_nums); // spread operator to expand iterable
 
         // Generate the gradient array (beige -> dark sea green)
-        const start_colour = [245,245,220]; // beige
-        const end_colour = [143,188,143]; // dark sea green
         const gradientArray = gradient(start_colour, end_colour, max_wfreq);
 
+        // Create a function that will return the values OR labels for the gauge
         function gauge_setup(mode) {
             let gauge_values = []
             let gauge_labels = []
             
             for (let i=0; i<max_wfreq; i++) {
-                // Get the gauge values
-                gauge_values.push(100/max_wfreq);
-
-                // Get the gauge labels
-                gauge_labels.push(`${i}-${i+1}`);
+                gauge_values.push(100/max_wfreq); // Get the gauge values
+                gauge_labels.push(`${i}-${i+1}`); // Get the gauge labels
             };
 
             // Add the value for the "transparent" half
@@ -183,13 +188,7 @@ function create_gauge(id) {
             };
         };
 
-        const gauge_centre = 0.5;
-
         function needle_path(gauge_value) {
-            // gauge_value = 0;
-            // Define the needle length as a constant
-            const needle_length = 0.15;
-
             // Calculate the angle of one sector (in degrees)
             let one_sector = 360 / (2 * max_wfreq);
 
@@ -206,9 +205,10 @@ function create_gauge(id) {
             let y_val = gauge_centre + 2 * needle_length * Math.sin(needle_angle);
 
             // Round the values to 2 decimal points
-            let x = Math.round(x_val*100)/100;
-            let y = Math.round(y_val*100)/100;
+            let x = Math.round(x_val * 100)/100;
+            let y = Math.round(y_val * 100)/100;
 
+            // Define the default needle base coordinates (valid for 2-7 inclusive)
             let lx = gauge_centre - 0.005; // 0.495
             let ly = gauge_centre;
             let rx = gauge_centre + 0.005; // 0.505
@@ -225,7 +225,7 @@ function create_gauge(id) {
                     rx = gauge_centre;
                     ry = gauge_centre + 0.01; // 0.51
                     break;
-                case null: // Needle disappears if the values is "null"
+                case null: // Needle disappears if wfreq is "null"
                     x = gauge_centre;
                     y = gauge_centre;
             };
@@ -251,7 +251,7 @@ function create_gauge(id) {
             hole: 0.5,
             rotation: 90,
             showlegend: false,
-            hoverinfo: "skip"
+            hoverinfo: "skip" // remove hovertext for the gauge
             }];
         
         let gauge_layout = {
@@ -275,10 +275,10 @@ function create_gauge(id) {
                 yref: gauge_centre,
                 fillcolor: "maroon",
                 line: {color: "maroon"},
-                x0: gauge_centre-0.01, // 0.49
-                y0: gauge_centre-0.02, // 0.48
-                x1: gauge_centre+0.01, // 0.51
-                y1: gauge_centre+0.02  // 0.52
+                x0: gauge_centre - 0.01, // 0.49
+                y0: gauge_centre - 0.02, // 0.48
+                x1: gauge_centre + 0.01, // 0.51
+                y1: gauge_centre + 0.02  // 0.52
             }]
         };
         
@@ -286,7 +286,8 @@ function create_gauge(id) {
     });
 };
 
-
+//-------- FUNCTION TO UPDATE THE PLOTS --------//
+// As per the "selDataset" onchange attribute
 function optionChanged(id) {
     create_plots(id);
     subject_metadata(id);
@@ -297,6 +298,7 @@ function optionChanged(id) {
 function init() {
     // Populate the dropdown with options
     d3.json(samples_url).then(function(data) {
+
         // Import relevant JSON array
         var names = Object.values(data.names);
 
