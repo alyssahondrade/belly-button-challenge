@@ -12,8 +12,8 @@ Dashboard deployed at: [https://alyssahondrade.github.io/belly-button-challenge/
     3. [Dataset](https://github.com/alyssahondrade/belly-button-challenge/tree/main#dataset)
 2. [Approach](https://github.com/alyssahondrade/belly-button-challenge/tree/main#approach)
     1. [Structure](https://github.com/alyssahondrade/belly-button-challenge/tree/main#structure)
-    2. [plots.js Script](https://github.com/alyssahondrade/belly-button-challenge/tree/main#plots-script)
-    3. [bonus.js Script](https://github.com/alyssahondrade/belly-button-challenge#bonus-section)
+    2. [plots.js Script](https://github.com/alyssahondrade/belly-button-challenge/tree/main#plotsjs-script)
+    3. [bonus.js Script](https://github.com/alyssahondrade/belly-button-challenge/tree/main#bonusjs-script)
 3. [References](https://github.com/alyssahondrade/belly-button-challenge/tree/main#references)
 
 ## Introduction
@@ -68,6 +68,30 @@ Dashboard deployed at: [https://alyssahondrade.github.io/belly-button-challenge/
     - This function is called at the end of the script to create the initial plots.
 
 ### `bonus.js` Script
+1. The constants are defined at the top of the script.
+    - `start_colour` and `end_colour` are derived by using the Digital Colour Meter.
+    - `gauge_centre` and `needle_length` are derived by inspection of the gauge canvas.
+
+2. `gradient()`
+    - Initialise the array that will hold the return value.
+    - The outer for-loop increments based on the `steps` argument.
+    - The inner for-loop increments over the `start_rgb` argument.
+    - `rgba(0, 0, 0, 0)` is pushed to the end of the return array for the transparent half of the indicator.
+
+3. `create_gauge()`
+    - Calculate the maximum `wfreq` value.
+        - Get all the `wfreq` values using `map()`.
+        - Use `filter()` to return only non-null values, otherwise the next step will fail.
+        - Use the spread operator with `Math.max()` to get the correct maximum value.
+    - Given the `max_wfreq` value, create the gradient array using `gradient()`.
+    - Create a `gauge_setup()` function that will return the values or labels for the gauge.
+        - The gauge values can be calculated by pushing `50/max_wfreq` over an array the length of `max_wfreq`, and returned using an if-statement given `mode === "values"`.
+        - The gauge labels can be calculated by pushing `${i}-${i+1}` as above, and returned using an if-statement given `mode === "labels"`.
+        - To account for the transparent half of the gauge:
+            - `50` is pushed to the end of `gauge_values`
+            - `""` is pushed to the end of `gauge_labels`
+        - This function uses `modes` to adhere to DRY principles.
+    - Create a `needle_path()` function that will get the coordinates to draw the needle.
 
 
 ## References
