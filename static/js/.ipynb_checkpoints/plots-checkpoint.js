@@ -105,7 +105,8 @@ function subject_metadata(id) {
         function find_id(subject) {
             return(subject.id === parseInt(id));
         };
-        
+
+        // Get the subject metadata
         let subject_metadata = metadata.filter(find_id)[0];
 
         // Clear the metadata info box
