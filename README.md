@@ -165,3 +165,13 @@ The instructor provided assistance during office hours about using a pie chart a
 - [14] Colorscales in JavaScript [https://plotly.com/javascript/colorscales/](https://plotly.com/javascript/colorscales/)
 
 - [15] Deploying to GitHub Pages [https://www.codecademy.com/article/f1-u3-github-pages#](https://www.codecademy.com/article/f1-u3-github-pages#)
+
+- [16] Bubble Charts in JavaScript [https://plotly.com/javascript/bubble-charts/](https://plotly.com/javascript/bubble-charts/)
+
+- [17] Pie Charts in JavaScript [https://plotly.com/javascript/pie-charts/](https://plotly.com/javascript/pie-charts/)
+
+- [18] Plotly.js gauge/pie chart data order [https://community.plotly.com/t/plotly-js-gauge-pie-chart-data-order/8686](https://community.plotly.com/t/plotly-js-gauge-pie-chart-data-order/8686)
+
+- [19] SVG path [https://www.w3schools.com/graphics/svg_path.asp](https://www.w3schools.com/graphics/svg_path.asp)
+
+- [20] Shapes in JavaScript [https://plotly.com/javascript/shapes/](https://plotly.com/javascript/shapes/)
