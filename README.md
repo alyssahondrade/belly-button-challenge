@@ -5,6 +5,7 @@ Github repository at: [https://github.com/alyssahondrade/belly-button-challenge.
 
 Dashboard deployed at: [https://alyssahondrade.github.io/belly-button-challenge/](https://alyssahondrade.github.io/belly-button-challenge/)
 
+
 ## Table of Contents
 1. [Introduction](https://github.com/alyssahondrade/belly-button-challenge/tree/main#introduction)
     1. [Goal](https://github.com/alyssahondrade/belly-button-challenge/tree/main#goal)
@@ -16,14 +17,24 @@ Dashboard deployed at: [https://alyssahondrade.github.io/belly-button-challenge/
     3. [bonus.js Script](https://github.com/alyssahondrade/belly-button-challenge/tree/main#bonusjs-script)
 3. [References](https://github.com/alyssahondrade/belly-button-challenge/tree/main#references)
 
+
 ## Introduction
 ### Goal
-
+The goal of the project is to build an interactive dashboard to explore the Belly Button Biodiversity dataset, to display:
+- A bar chart of a subject's top 10 samples.
+- A bubble chart of all microbial species (called operational taxonomic units, or OTUs) for a subject.
+- The subject's demographic information.
+- A gauge indicator for their washing frequency.
 
 ### Repository Structure
-
+- The root directory contains `index.html`.
+- The `images` directory contains the `coordinates.png`.
+- The `static` directory contains the following subdirectories:
+    - `data` contains `samples.json`, for reference only.
+    - `js` contains the scripts: `plots.js` and `bonus.js`.
 
 ### Dataset
+Belly Button Biodiversity: [http://robdunnlab.com/projects/belly-button-biodiversity/](http://robdunnlab.com/projects/belly-button-biodiversity/)
 
 
 ## Approach
@@ -104,15 +115,15 @@ Dashboard deployed at: [https://alyssahondrade.github.io/belly-button-challenge/
                 - State 3: Null value for `wfreq` (remove the needle if null).
     - A filter function is used to find the correct subject ID, and the result passed to the `needle_path()` function.
 
+4. Create the gauge plot:
+    - The `width` and `height` must be defined in the layout to ensure the needle is displayed consistently regardless of the size of the canvas.
+    - The `path` derivation is described in the table below.
+
 > Note: Since the circle is drawn clockwise, cosine is `(+)` in Q2 and `(-)` in Q1.
 
 |![coordinates.png](https://github.com/alyssahondrade/belly-button-challenge/blob/main/images/coordinates.png)|
 |:---:|
 |Coordinate Calculation|
-
-4. Create the gauge plot:
-    - The `width` and `height` must be defined in the layout to ensure the needle is displayed consistently regardless of the size of the canvas.
-    - The `path` derivation is described in the table below.
   
 |Path Component|Description|
 |:---:|:---:|
@@ -121,6 +132,7 @@ Dashboard deployed at: [https://alyssahondrade.github.io/belly-button-challenge/
 |`L ${needle_coords[2]} ${needle_coords[3]}`| Line to the left side |
 |`L ${needle_coords[4]} ${needle_coords[5]}`| Line across to the right |
 |`L ${needle_coords[0]} ${needle_coords[1]} Z`| Line back to the needle point and close the path |
+
 
 ## References
 Instructor provided assistance during office hours about using a pie chart and scatter plot instead of an indicator for the gauge plot, due to the scaling issues when using annotation to label each gauge sector.
