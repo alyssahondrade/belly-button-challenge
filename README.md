@@ -98,5 +98,9 @@ Dashboard deployed at: [https://alyssahondrade.github.io/belly-button-challenge/
             - Convert the total angle to radians.
             - The image below demonstrates the calculations used to define the `x_val` and `y_val`. Note: Since the circle is drawn clockwise, cosine is `(+)` in Q2 and `(-)` in Q1.
 
+|![coordinates.png](https://github.com/alyssahondrade/belly-button-challenge/blob/main/images/coordinates.png)|
+|:---:|
+|Coordinate Calculation|
+
 
 ## References
