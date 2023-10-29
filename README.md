@@ -20,7 +20,7 @@ Dashboard deployed at: [https://alyssahondrade.github.io/belly-button-challenge/
 
 ## Introduction
 ### Goal
-The goal of the project is to build an interactive dashboard to explore the Belly Button Biodiversity dataset, to display:
+Build an interactive dashboard to explore the Belly Button Biodiversity dataset, to display:
 - A bar chart of a subject's top 10 samples.
 - A bubble chart of all microbial species (called operational taxonomic units, or OTUs) for a subject.
 - The subject's demographic information.
@@ -134,7 +134,7 @@ Belly Button Biodiversity: [http://robdunnlab.com/projects/belly-button-biodiver
 
 
 ## References
-Instructor provided assistance during office hours about using a pie chart and scatter plot instead of an indicator for the gauge plot, due to the scaling issues when using annotation to label each gauge sector.
+The instructor provided assistance during office hours about using a pie chart and scatter plot instead of an indicator for the gauge plot, due to the scaling issues when using annotation to label each gauge sector.
 
 - [1] Iterate over a Dictionary [https://buzzcoder.gitbooks.io/codecraft-javascript/content/object/iterate-over-a-dictionary.html](https://buzzcoder.gitbooks.io/codecraft-javascript/content/object/iterate-over-a-dictionary.html)
 
