@@ -120,7 +120,37 @@ Dashboard deployed at: [https://alyssahondrade.github.io/belly-button-challenge/
 |`L ${needle_coords[0]} ${needle_coords[1]}`| Line to the needle point |
 |`L ${needle_coords[2]} ${needle_coords[3]}`| Line to the left side |
 |`L ${needle_coords[4]} ${needle_coords[5]}`| Line across to the right |
-|`L ${needle_coords[0]} ${needle_coords[1]}`| Line back to the needle point |
-|`Z`| Close off the path |
+|`L ${needle_coords[0]} ${needle_coords[1]} Z`| Line back to the needle point and close the path |
 
 ## References
+Instructor provided assistance during office hours about using a pie chart and scatter plot instead of an indicator for the gauge plot, due to the scaling issues when using annotation to label each gauge sector.
+
+- [1] Iterate over a Dictionary [https://buzzcoder.gitbooks.io/codecraft-javascript/content/object/iterate-over-a-dictionary.html](https://buzzcoder.gitbooks.io/codecraft-javascript/content/object/iterate-over-a-dictionary.html)
+
+- [2] D3 Removing Elements [https://stackoverflow.com/questions/16260285/d3-removing-elements](https://stackoverflow.com/questions/16260285/d3-removing-elements)
+
+- [3] Math.max() [https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/max#](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/max#)
+
+- [4] Remove Null Values from Array in JavaScript [https://herewecode.io/blog/remove-null-values-from-array-javascript/](https://herewecode.io/blog/remove-null-values-from-array-javascript/)
+
+- [5] JavaScript Operators Reference [https://www.w3schools.com/jsref/jsref_operators.asp](https://www.w3schools.com/jsref/jsref_operators.asp)
+
+- [6] How to make background transparent with javascript [https://www.sitepoint.com/community/t/how-to-make-background-transparent-with-javascript/8129](https://www.sitepoint.com/community/t/how-to-make-background-transparent-with-javascript/8129)
+
+- [7] Math.sin() [https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/sin](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/sin)
+
+- [8] JavaScript round a number to 2 decimal places (with examples) [https://codedamn.com/news/javascript/javascript-round-a-number-to-2-decimal-places-with-examples#](https://codedamn.com/news/javascript/javascript-round-a-number-to-2-decimal-places-with-examples#)
+
+- [9] Layout.annotations in JavaScript [https://plotly.com/javascript/reference/layout/annotations/#layout-annotations](https://plotly.com/javascript/reference/layout/annotations/#layout-annotations)
+
+- [10] Creative Interactive Charts Using Plotly.js - Pie and Gauge Charts [https://code.tutsplus.com/create-interactive-charts-using-plotlyjs-pie-and-gauge-charts--cms-29216t](https://code.tutsplus.com/create-interactive-charts-using-plotlyjs-pie-and-gauge-charts--cms-29216t)
+
+- [11] Plot Sizing Problems [https://community.plotly.com/t/plot-sizing-problems/1620/19](https://community.plotly.com/t/plot-sizing-problems/1620/19)
+
+- [12] Initial SVG height before window resize [https://community.plotly.com/t/initial-svg-height-before-window-resize/3673/4](https://community.plotly.com/t/initial-svg-height-before-window-resize/3673/4)
+
+- [13] Disable hover information on trace, plotly [https://stackoverflow.com/questions/32319619/disable-hover-information-on-trace-plotly](https://stackoverflow.com/questions/32319619/disable-hover-information-on-trace-plotly)
+
+- [14] Colorscales in JavaScript [https://plotly.com/javascript/colorscales/](https://plotly.com/javascript/colorscales/)
+
+- [15] Deploying to GitHub Pages [https://www.codecademy.com/article/f1-u3-github-pages#](https://www.codecademy.com/article/f1-u3-github-pages#)

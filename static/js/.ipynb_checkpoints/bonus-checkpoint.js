@@ -1,4 +1,4 @@
-// Define the constants
+//-------- DEFINE THE CONSTANTS --------//
 const start_colour = [245, 240, 232];
 const end_colour = [128, 170, 124];
 const gauge_centre = 0.5; // value for both x- and y-coordinates
@@ -38,6 +38,7 @@ function create_gauge(id) {
         // Import relevant JSON array
         var metadata = Object.values(data.metadata);
 
+        //-------- CALCULATE THE MAX WFREQ VALUE --------//
         // Convert the wfreq value to an integer
         let wfreq_list = metadata.map((subject) => parseInt(subject.wfreq));
     
@@ -47,9 +48,11 @@ function create_gauge(id) {
         // Use the spread operator to expand the iterable
         let max_wfreq = Math.max(...wfreq_nums);
 
+        //-------- CREATE THE GRADIENT ARRAY --------//
         // Generate the gradient array (beige -> dark sea green)
         let gradientArray = gradient(start_colour, end_colour, max_wfreq);
 
+        //-------- CREATE THE GAUGE_SETUP FUNCTION --------//
         // Create a function that will return the values OR labels for the gauge
         function gauge_setup(mode) {
             let gauge_values = []
@@ -72,6 +75,7 @@ function create_gauge(id) {
             };
         };
 
+        //-------- CREATE THE NEEDLE_PATH FUNCTION --------//
         // Create a function that will get the coordinates to draw the needle
         function needle_path(gauge_value) {
             // Calculate the angle of one sector (in degrees)

@@ -1,4 +1,4 @@
-// Define the constants
+//-------- DEFINE THE CONSTANTS --------//
 const start_colour = [245, 240, 232];
 const end_colour = [128, 170, 124];
 const gauge_centre = 0.5; // value for both x- and y-coordinates
