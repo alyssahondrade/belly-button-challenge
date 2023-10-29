@@ -113,18 +113,17 @@ Belly Button Biodiversity: [http://robdunnlab.com/projects/belly-button-biodiver
                 - State 1: Coordinates valid for `gauge_value` from 2 to 7.
                 - State 2: Coordinates valid for other numerical `gauge_value`.
                 - State 3: Null value for `wfreq` (remove the needle if null).
-    - A filter function is used to find the correct subject ID, and the result passed to the `needle_path()` function.
-
-4. Create the gauge plot:
-    - The `width` and `height` must be defined in the layout to ensure the needle is displayed consistently regardless of the size of the canvas.
-    - The `path` derivation is described in the table below.
-
-> Note: Since the circle is drawn clockwise, cosine is `(+)` in Q2 and `(-)` in Q1.
 
 |![coordinates.png](https://github.com/alyssahondrade/belly-button-challenge/blob/main/images/coordinates.png)|
 |:---:|
 |Coordinate Calculation|
-  
+> Note: Since the circle is drawn clockwise, cosine is `(+)` in Q2 and `(-)` in Q1.
+
+4. Create the gauge plot:
+    - A filter function is used to find the correct subject ID, and the result passed to the `needle_path()` function.
+    - The `width` and `height` must be defined in the layout to ensure the needle is displayed consistently regardless of the size of the canvas.
+    - The `path` derivation is described in the table below.
+
 |Path Component|Description|
 |:---:|:---:|
 |`M ${gauge_centre} ${gauge_centre}`| Define the start position |
