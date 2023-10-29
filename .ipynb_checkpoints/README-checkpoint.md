@@ -97,6 +97,12 @@ Dashboard deployed at: [https://alyssahondrade.github.io/belly-button-challenge/
             - Calculate the total angle given the `gauge_value` provided.
             - Convert the total angle to radians.
             - The image below demonstrates the calculations used to define the `x_val` and `y_val`.
+        - The needle base coordinates were derived visually, centred about the `gauge_centre`.
+            - A switch statement is used to account for 3 "states":
+                - State 1: Coordinates valid for `gauge_value` from 2 to 7.
+                - State 2: Coordinates valid for other numerical `gauge_value`.
+                - State 3: Null value for `wfreq` (remove the needle if null).
+    - A filter function is used to find the correct subject ID, and the result passed to the `needle_path()` function.
 
 > Note: Since the circle is drawn clockwise, cosine is `(+)` in Q2 and `(-)` in Q1.
 
@@ -104,5 +110,17 @@ Dashboard deployed at: [https://alyssahondrade.github.io/belly-button-challenge/
 |:---:|
 |Coordinate Calculation|
 
+4. Create the gauge plot:
+    - The `width` and `height` must be defined in the layout to ensure the needle is displayed consistently regardless of the size of the canvas.
+    - The `path` derivation is described in the table below.
+  
+|Path Component|Description|
+|:---:|:---:|
+|`M ${gauge_centre} ${gauge_centre}`| Define the start position |
+|`L ${needle_coords[0]} ${needle_coords[1]}`| Line to the needle point |
+|`L ${needle_coords[2]} ${needle_coords[3]}`| Line to the left side |
+|`L ${needle_coords[4]} ${needle_coords[5]}`| Line across to the right |
+|`L ${needle_coords[0]} ${needle_coords[1]}`| Line back to the needle point |
+|`Z`| Close off the path |
 
 ## References
